@@ -1,0 +1,18 @@
+{
+ "ground_truth": "synthesizer control track, not a human reference",
+ "pitch": {
+  "frames_compared": 3715,
+  "voiced_recall": 0.9987,
+  "rms_error_cents": 20.24,
+  "median_abs_error_cents": 6.2,
+  "gross_error_rate_over_50c": 0.0272
+ },
+ "notes": {
+  "score_notes": 38,
+  "detected_notes": 38,
+  "matched_within_120ms": 35,
+  "matched_with_correct_pitch": 35,
+  "median_onset_error_ms": 46.9
+ },
+ "alignment_warning": null
+}

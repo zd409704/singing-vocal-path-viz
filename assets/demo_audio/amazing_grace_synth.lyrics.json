@@ -1,0 +1,279 @@
+{
+ "title": "Amazing Grace (traditional)",
+ "subtitle": "AMAZING GRACE \u00b7 SYNTHESIZED DEMO VOICE",
+ "syllables": [
+  {
+   "grapheme": "A",
+   "pron": "uh",
+   "phones": [
+    "AH"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "ma",
+   "pron": "may",
+   "phones": [
+    "M",
+    "EY"
+   ],
+   "notes": 3
+  },
+  {
+   "grapheme": "zing",
+   "pron": "zing",
+   "phones": [
+    "Z",
+    "IH",
+    "NG"
+   ],
+   "notes": 2
+  },
+  {
+   "grapheme": "grace",
+   "pron": "grayss",
+   "phones": [
+    "G",
+    "R",
+    "EY",
+    "S"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "how",
+   "pron": "how",
+   "phones": [
+    "HH",
+    "AW"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "sweet",
+   "pron": "sweet",
+   "phones": [
+    "S",
+    "W",
+    "IY",
+    "T"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "the",
+   "pron": "thuh",
+   "phones": [
+    "DH",
+    "AH"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "sound",
+   "pron": "sownd",
+   "phones": [
+    "S",
+    "AW",
+    "N",
+    "D"
+   ],
+   "notes": 3
+  },
+  {
+   "grapheme": "that",
+   "pron": "that",
+   "phones": [
+    "DH",
+    "AE",
+    "T"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "saved",
+   "pron": "sayvd",
+   "phones": [
+    "S",
+    "EY",
+    "V",
+    "D"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "a",
+   "pron": "uh",
+   "phones": [
+    "AH"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "wretch",
+   "pron": "retch",
+   "phones": [
+    "R",
+    "EH",
+    "CH"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "like",
+   "pron": "lyke",
+   "phones": [
+    "L",
+    "AY",
+    "K"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "me",
+   "pron": "mee",
+   "phones": [
+    "M",
+    "IY"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "I",
+   "pron": "eye",
+   "phones": [
+    "AY"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "once",
+   "pron": "wunss",
+   "phones": [
+    "W",
+    "AH",
+    "N",
+    "S"
+   ],
+   "notes": 3
+  },
+  {
+   "grapheme": "was",
+   "pron": "wuz",
+   "phones": [
+    "W",
+    "AH",
+    "Z"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "lost",
+   "pron": "lawst",
+   "phones": [
+    "L",
+    "AO",
+    "S",
+    "T"
+   ],
+   "notes": 2
+  },
+  {
+   "grapheme": "but",
+   "pron": "butt",
+   "phones": [
+    "B",
+    "AH",
+    "T"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "now",
+   "pron": "now",
+   "phones": [
+    "N",
+    "AW"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "am",
+   "pron": "am",
+   "phones": [
+    "AE",
+    "M"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "found",
+   "pron": "fownd",
+   "phones": [
+    "F",
+    "AW",
+    "N",
+    "D"
+   ],
+   "notes": 3
+  },
+  {
+   "grapheme": "was",
+   "pron": "wuz",
+   "phones": [
+    "W",
+    "AH",
+    "Z"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "blind",
+   "pron": "blynd",
+   "phones": [
+    "B",
+    "L",
+    "AY",
+    "N",
+    "D"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "but",
+   "pron": "butt",
+   "phones": [
+    "B",
+    "AH",
+    "T"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "now",
+   "pron": "now",
+   "phones": [
+    "N",
+    "AW"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "I",
+   "pron": "eye",
+   "phones": [
+    "AY"
+   ],
+   "notes": 1
+  },
+  {
+   "grapheme": "see",
+   "pron": "see",
+   "phones": [
+    "S",
+    "IY"
+   ],
+   "notes": 1
+  }
+ ]
+}

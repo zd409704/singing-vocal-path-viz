@@ -1,0 +1,57 @@
+Reproduce the singing vocal-path dashboard as a watchable demo.
+
+Working directory: /srv/claude/research/singing-vocal-path-viz
+Stay under /srv/claude/research/singing-vocal-path-viz/ for all writes.
+Do not write other programs' STATUS files. Do not start other programs' work.
+
+Manager decision (read it):
+/srv/claude/research/singing-vocal-path-viz/orch/decisions/2026-11-08-manager-start-reproduce-vocal-path.md
+sha256 ca89d7cbe77bed48ece403ec9d8c96d558c196691c64801452ae4f030c9553ed
+
+STATUS at start:
+/srv/claude/research/singing-vocal-path-viz/STATUS.md
+sha256 ceec68cbac164b82659bab67ece573e636d34851962e5feb49db893f5c1a87ff
+
+Source post (layout and motion reference only):
+https://x.com/slashui/status/2119421849134305644
+Local visual reference: notes/reference/source-post-2119421849134305644.mp4
+Sampled frames: notes/reference/frames/target-01.jpg through target-46.jpg
+Notes: notes/reference/SOURCE.md
+
+Hard audio rule:
+- Use the reference video and frames only to match layout and motion.
+- Do not extract, dump, copy, remix, or reuse the reference soundtrack as demo audio. The embedded recording is a child singing and must not be redistributed or used as the program demo track.
+- Do not run ffmpeg or any decoder in a way that writes that soundtrack out as a reusable wav/mp3 for the demo.
+- Demo audio must be a separately sourced short a cappella clip: a public-domain singing recording, or a newly synthesized or newly recorded adult clip this program may use.
+- Do not use a copyrighted commercial song as the demo track.
+- Document the demo-audio source and license in notes/.
+
+What to build
+A dark three-column dashboard titled VOCAL PATH, synced to the demo singing clip:
+
+1) Left: full-body wireframe side view with lungs, airway, and animated airflow; a lung-volume readout (clearly labeled illustrative).
+2) Center top: midsagittal cut of the oral cavity and vocal tract (nasal cavity, soft palate / velum, hard palate, tongue, jaw, lips, pharynx, glottis) with illustrated airflow.
+3) Center bottom: current syllable or phone (a grapheme plus a pronunciation line), current pitch name and cents offset, sliders or bars for tongue height, tongue backness, tongue tip, jaw opening, lip rounding, velum opening, and airflow, plus a small glottis schematic.
+4) Right: piano-roll pitch chart (about G3 to D5), note blocks for detected sung notes, a live pitch trace that can wobble and show vibrato, color for recorded notes / stable tracking / pitch deviation, a breath or voicing energy strip under the roll, and a phoneme timeline. A playhead and timestamp scan left to right.
+
+Keep the honesty already present in the source UI: notes come from the recording; articulation and airflow are illustrative, not physically measured. Extract pitch (and, if feasible, note segments and phones) from the demo audio. Drive tract and breath animation from a clearly labeled illustrative mapping (for example from estimated phones, pitch, and energy). Do not claim medical or studio-measured articulation.
+
+All code, comments, UI chrome, and notes use English labels with the same layout and equivalent wording to the reference (title VOCAL PATH is already Latin in the source). A short disclaimer in the chrome should state that notes are extracted from the recording and that articulation and airflow are illustrative.
+
+Implementation guidance
+- Land a first visible demo rather than a perfect physiological model. A full biomechanical vocal-tract solver is not required.
+- Create a program-local virtualenv if needed (system Python is sparse). System ffmpeg is available.
+- Pitch extraction: use a documented method (for example pYIN or similar) and write a short note on how pitch was extracted and what remains illustrative.
+- Prefer finishing a watchable synced video over extra polish.
+- A playable local page is welcome in addition to the video.
+
+Deliverables, all under this program:
+- Runnable pipeline (singing audio in, analysis, visualization out)
+- A short how-to (README or docs/howto.md)
+- At least one demo video under results/ that shows the dashboard following the singing clip (pitch trace visibly tracking the voice; tract and breath moving with the performance)
+- Demo audio file stored under this program (not taken from the reference video), with source/license noted
+- Update STATUS.md with state, next, updated time, pointers to artifacts, and sha256 of key files
+- When sealed, write notes/MATERIAL.md listing artifacts, hashes, honest claims, limitations, and the demo-audio source
+
+Print short progress updates as you go.
+Human lead is recorded in STATUS as Peter.
