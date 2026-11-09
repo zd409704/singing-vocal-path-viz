@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Voice mechanisms A/B</title>
+<style>
+body{font:14px system-ui,sans-serif;margin:16px;background:#fafafa;color:#222}h1{font-size:19px;margin:0 0 4px}h2{font-size:15px;margin:10px 0 4px}
+.warn{background:#fff3cd;border:1px solid #e0c060;padding:6px 10px;border-radius:4px;margin:6px 0}
+.row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}.col{flex:1 1 520px;min-width:0;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px}
+.score{background:#eef4ff;border:1px solid #9bd;border-radius:6px;padding:10px;margin:8px 0}
+label{margin-right:12px}.p{display:grid;grid-template-columns:230px 1fr 90px 90px 26px;gap:6px;align-items:center;font-size:13px}.p .u{color:#666;font-size:12px}
+.p.off{opacity:.45}details{border-top:1px solid #eee;padding:3px 0}summary{cursor:pointer;font-weight:600}
+pre{background:#f4f4f4;padding:8px;font-size:12px;white-space:pre-wrap;word-break:break-all;max-height:320px;overflow:auto}
+.err{color:#b00020;font-weight:600}.note{font-size:12px;color:#666;margin:2px 0 6px}button{margin:2px 4px 2px 0}
+</style></head><body>
+<h1>Voice mechanisms: comparative render page</h1>
+<div class="warn">Every render runs the selected pinned native engine on this machine, through a server that listens on loopback only. Numbers shown are measurements, not listening judgments. Models are physically reduced. Nothing here is an owner quality acceptance.</div>
+<div class="score"><h2>Score (shared by A and B; separate from model settings)</h2>
+<label>Piece <select id="song"></select></label>
+<label>Planner seed <input id="seed" type="number" value="29" style="width:70px"></label>
+<label>Transpose (semitones) <input id="transpose" type="number" min="-12" max="12" value="0" style="width:60px"></label>
+<label>Tempo (x) <input id="tempo" type="number" min="0.5" max="2" step="0.05" value="1" style="width:70px"></label>
+<button id="scoreReset">Reset score</button>
+<div class="note" id="scoreNote"></div>
+<button id="renderBoth">Render A and B</button>
+<label><input type="checkbox" id="matched"> Matched loudness on playback (files keep their levels)</label>
+<label>Output <select id="output"><option value="dry">Dry</option><option value="room">Room</option></select></label>
+<button id="saveCfg">Export config</button><label>Load config <input type="file" id="loadCfg" accept=".json"></label>
+</div>
+<div class="row"><div class="col" id="A"></div><div class="col" id="B"></div></div>
+<script>
+let REG;const sides={};let audioCtx;
+const $=(s,r=document)=>r.querySelector(s),el=(t,a={},...c)=>{const e=document.createElement(t);for(const k in a){if(k==='class')e.className=a[k];else if(k.startsWith('on'))e.addEventListener(k.slice(2),a[k]);else if(k in e&&k!=='list')e[k]=a[k];else e.setAttribute(k,a[k])}c.forEach(x=>e.append(x));return e};
+function scoreCfg(){return{song:$('#song').value,seed:+$('#seed').value,transpose:+$('#transpose').value,tempo:+$('#tempo').value}}
+function vInfo(id){return REG.versions.find(v=>v.id===id)}
+function paramRow(p,side,store,group){
+ const wrap=el('div',{class:'p'});const lab=el('span',{textContent:p.label});
+ const def=()=>p.default;let input;
+ const apply=v=>{ if(v===def()) delete store[p.key]; else store[p.key]=v; };
+ if(p.type==='bool'){input=el('input',{type:'checkbox',checked:p.default});input.onchange=()=>apply(input.checked);wrap.append(lab,input,el('span'),el('span'))}
+ else if(p.type==='enum'){input=el('select');p.options.forEach(o=>input.append(el('option',{value:o,textContent:o})));input.value=p.default;input.onchange=()=>apply(input.value);wrap.append(lab,input,el('span'),el('span'))}
+ else{const r=el('input',{type:'range',min:p.min,max:p.max,step:p.step,value:p.default});input=el('input',{type:'number',min:p.min,max:p.max,step:p.step,value:p.default});
+  r.oninput=()=>{input.value=r.value;apply(+r.value)};input.oninput=()=>{r.value=input.value;if(input.value!=='')apply(+input.value)};
+  wrap.append(lab,r,input,el('span',{class:'u',textContent:p.unit||''}));wrap._r=r}
+ const reset=el('button',{textContent:'↺',title:'Reset to default '+p.default,onclick:()=>{delete store[p.key];setVal(input,wrap,p.default)}});wrap.append(reset);
+ wrap._input=input;wrap._p=p;return wrap}
+function setVal(input,wrap,v){if(input.type==='checkbox')input.checked=v;else input.value=v;if(wrap._r)wrap._r.value=v}
+function buildSide(name){
+ const s=sides[name]={name,version:'upgraded-algo',mech:{},base:{},ablate:{},rows:{},engineSeed:''};const root=$('#'+name);root.innerHTML='';
+ root.append(el('h2',{textContent:'Model '+name}));
+ const vs=el('select');REG.versions.forEach(v=>{const tag=v.sourceInRepo?'':(v.reconstructable?' (reconstruct, then build)':' (source omitted)');vs.append(el('option',{value:v.id,textContent:v.label+tag}))});vs.value=name==='A'?'upgraded-algo':'m7-anatomy';s.version=vs.value;vs.onchange=()=>{s.version=vs.value;refresh(s)};
+ const seed=el('input',{type:'number',placeholder:'fixed',style:'width:90px'});seed.oninput=()=>s.engineSeed=seed.value;s.seedEl=seed;s.versionEl=vs;
+ root.append(el('label',{},'Version ',vs),el('label',{},'Engine seed ',seed));
+ root.append(el('div',{class:'note',id:name+'info'}));
+ const ab=el('div',{id:name+'ablate'});root.append(el('h2',{textContent:'Mechanism switches (ablations)'}),ab);s.ablateEl=ab;
+ const groups=['fold','feedback','register','sourceMap','tract','breath','anatomy'];s.groups=groups;
+ s.mechDet={};groups.forEach(g=>{s.mech[g]={};const d=el('details');d.append(el('summary',{textContent:'Mechanism: '+g}));const c=el('div');d.append(c);
+  REG.params.filter(p=>p.group===g).forEach(p=>{const r=paramRow(p,s,s.mech[g],g);c.append(r);(s.rows[g]=s.rows[g]||[]).push(r)});root.append(d);s.mechDet[g]=d});
+ const bd=el('details');bd.append(el('summary',{textContent:'Engine runtime controls'}));REG.baseParams.forEach(p=>{const r=paramRow(p,s,s.base,'base');bd.append(r);if(p.note)bd.append(el('div',{class:'note',textContent:p.note}));(s.rows.base=s.rows.base||[]).push(r)});root.append(bd);
+ root.append(el('div',{class:'note',textContent:REG.fixedMechanicsNote}));
+ const rb=el('button',{textContent:'Render '+name,onclick:()=>renderSide(s)});const rs=el('button',{textContent:'Re-render (check reproducibility)',onclick:()=>renderSide(s,true)});const reset=el('button',{textContent:'Reset all parameters',onclick:()=>resetSide(s)});
+ root.append(el('div',{},rb,rs,reset));
+ const ctl=el('div');s.audio=el('audio',{controls:true,style:'width:100%'});s.status=el('div');s.meta=el('pre',{textContent:'not rendered'});s.dl=el('div');ctl.append(s.audio,s.dl);root.append(ctl,s.status,s.meta);
+ refresh(s)}
+function resetSide(s){s.groups.forEach(g=>{for(const k in s.mech[g])delete s.mech[g][k];(s.rows[g]||[]).forEach(r=>setVal(r._input,r,r._p.default))});for(const k in s.base)delete s.base[k];(s.rows.base||[]).forEach(r=>setVal(r._input,r,r._p.default));s.ablate={};s.engineSeed='';s.seedEl.value='';refresh(s)}
+function refresh(s){const v=vInfo(s.version);const allowed=REG.checkpointMechanisms[v.checkpoint]||[];const preset=v.mech||{};
+ $('#'+s.name+'info').textContent=`Checkpoint ${v.checkpoint}. Kind ${v.kind}. ${v.scoreSupport||''} `+(v.kind==='mech'?'':'Engine seed and mechanism controls are inactive here: this binary has no mechanisms. Its noise uses the fixed seed. ')+(v.reason||'');
+ s.ablateEl.innerHTML='';s.groups.forEach(g=>{const present=allowed.includes(g),on=s.ablate[g]!==undefined?s.ablate[g]:!!preset[g];const cb=el('input',{type:'checkbox',checked:present&&on,disabled:!present});
+  cb.onchange=()=>{s.ablate[g]=cb.checked;refresh(s)};const lab=el('label',{},cb,' '+g+(present?'':' (not in this checkpoint)'));s.ablateEl.append(lab);
+  const fold=allowed.includes('fold')&&(s.ablate.fold!==undefined?s.ablate.fold:!!preset.fold);const inert=(g==='feedback'||g==='register')&&present&&!fold;
+  if(inert)s.ablateEl.append(el('span',{class:'note',textContent:'(inert: needs fold) '}));
+  const active=present&&(s.ablate[g]!==undefined?s.ablate[g]:!!preset[g]);(s.rows[g]||[]).forEach(r=>{r.classList.toggle('off',!active);r._input.disabled=!active;if(r._r)r._r.disabled=!active})});
+ (s.rows.base||[]).forEach(r=>{const off=v.kind==='upstream';r.classList.toggle('off',off);r._input.disabled=off;if(r._r)r._r.disabled=off});
+ s.seedEl.disabled=v.kind!=='mech';if(v.kind!=='mech')s.seedEl.placeholder='fixed';else s.seedEl.placeholder='fixed unless set'}
+function sideCfg(s){const mech={};s.groups.forEach(g=>{if(Object.keys(s.mech[g]).length)mech[g]={...s.mech[g]}});return{version:s.version,mech,base:{...s.base},ablate:{...s.ablate},engineSeed:s.engineSeed}}
+async function renderSide(s,force){s.status.className='';s.status.textContent='Rendering '+s.version+'…';const t=performance.now();
+ try{const r=await fetch('/api/render',{method:'POST',body:JSON.stringify({score:scoreCfg(),side:sideCfg(s),force:!!force})});const j=await r.json();if(!r.ok||j.error)throw new Error(j.error||r.status);
+  s.last=j;s.status.textContent=`Done in ${((performance.now()-t)/1000).toFixed(1)} s (${j.cached?'cached, identical inputs':'rendered'})${j.reproducedExisting===undefined?'':' · reproduced existing file: '+j.reproducedExisting}`;
+  s.meta.textContent=JSON.stringify(j,null,1);updatePlayer();}
+ catch(e){s.status.className='err';s.status.textContent='Error: '+e.message}}
+function updatePlayer(){const out=$('#output').value;const a=sides.A.last,b=sides.B.last;
+ for(const s of Object.values(sides)){if(!s.last)continue;const f=s.last[out];const src=f.url+'?k='+s.last.key;if(s.audio.dataset.src!==src){s.audio.src=src;s.audio.dataset.src=src}
+  s.dl.innerHTML='';s.dl.append(el('a',{href:f.url,download:`${s.last.version}_${s.last.key}_${out}.wav`,textContent:`Export ${out} WAV`}),' · sha256 '+f.sha256.slice(0,16)+'… · active RMS '+f.activeRmsDb.toFixed(2)+' dB')}
+ const matched=$('#matched').checked&&a&&b;const ta=a&&a[out].activeRmsDb,tb=b&&b[out].activeRmsDb;
+ if(!audioCtx&&(a||b)){audioCtx=new AudioContext();for(const s of Object.values(sides)){s.src=audioCtx.createMediaElementSource(s.audio);s.gain=audioCtx.createGain();s.src.connect(s.gain).connect(audioCtx.destination)}}
+ if(audioCtx){const target=matched?Math.min(ta,tb):null;for(const s of Object.values(sides)){if(!s.last)continue;s.gain.gain.value=matched?Math.pow(10,(target-s.last[out].activeRmsDb)/20):1}}}
+function exportCfg(){const blob=new Blob([JSON.stringify({score:scoreCfg(),output:$('#output').value,A:sideCfg(sides.A),B:sideCfg(sides.B)},null,1)],{type:'application/json'});const a=el('a',{href:URL.createObjectURL(blob),download:'voice_ab_config.json'});a.click()}
+function loadSide(s,c){resetSide(s);s.version=c.version;s.versionEl.value=c.version;s.engineSeed=c.engineSeed||'';s.seedEl.value=s.engineSeed;s.ablate=c.ablate||{};
+ Object.entries(c.mech||{}).forEach(([g,ps])=>{Object.entries(ps).forEach(([k,v])=>{const r=(s.rows[g]||[]).find(x=>x._p.key===k);if(r){setVal(r._input,r,v);s.mech[g][k]=v}})});Object.entries(c.base||{}).forEach(([k,v])=>{const r=(s.rows.base||[]).find(x=>x._p.key===k);if(r){setVal(r._input,r,v);s.base[k]=v}});refresh(s)}
+function loadCfg(f){f.text().then(t=>{const c=JSON.parse(t);$('#song').value=c.score.song;$('#seed').value=c.score.seed;$('#transpose').value=c.score.transpose;$('#tempo').value=c.score.tempo;$('#output').value=c.output||'dry';loadSide(sides.A,c.A);loadSide(sides.B,c.B)})}
+async function init(){REG=await (await fetch('/api/registry')).json();if(REG.publication&&REG.publication.banner){$('.warn').append(document.createTextNode(' '+REG.publication.banner))}const sel=$('#song');const names={twinkle:'Twinkle, Twinkle, Little Star',two_tigers:'Two Tigers (ASCII pinyin internally)',amazing_grace:'Amazing Grace'};REG.songs.forEach(s=>sel.append(el('option',{value:s,textContent:names[s]||REG.probeTitles[s]||s})));
+ sel.value=REG.scoreDefault.song;$('#scoreNote').textContent='Traditional public-domain melodies and short probes. Seed 29 at transposition 0, tempo 1 matches the planner output of the *_algo songs.';
+ buildSide('A');buildSide('B');$('#renderBoth').onclick=()=>Promise.all([renderSide(sides.A),renderSide(sides.B)]);$('#output').onchange=updatePlayer;$('#matched').onchange=updatePlayer;$('#saveCfg').onclick=exportCfg;$('#loadCfg').onchange=e=>e.target.files[0]&&loadCfg(e.target.files[0]);
+ $('#scoreReset').onclick=()=>{$('#song').value=REG.scoreDefault.song;$('#seed').value=REG.scoreDefault.seed;$('#transpose').value=0;$('#tempo').value=1}}
+init();
+</script></body></html>

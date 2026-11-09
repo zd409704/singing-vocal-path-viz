@@ -1,0 +1,766 @@
+diff --git a/crates/chimera-cli/src/compare.rs b/crates/chimera-cli/src/compare.rs
+index edadeb2..bbaa2bf 100644
+--- a/crates/chimera-cli/src/compare.rs
++++ b/crates/chimera-cli/src/compare.rs
+@@ -290,6 +290,7 @@ fn render_notes(notes: &[Note], body_name: &str, seconds: f64) -> Result<Render,
+                 bpm: 60.0,
+                 t0: notes[i].start,
+                 vibrato: VIBRATO_CENTS,
++                ..Default::default()
+             },
+         );
+         v.schedule(&plan.gestures);
+diff --git a/crates/chimera-cli/src/render.rs b/crates/chimera-cli/src/render.rs
+index 9e105a2..8ccb286 100644
+--- a/crates/chimera-cli/src/render.rs
++++ b/crates/chimera-cli/src/render.rs
+@@ -253,6 +253,7 @@ pub fn song(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+                 bpm: song.bpm,
+                 t0: 0.3,
+                 vibrato: 35.0,
++                ..Default::default()
+             },
+         );
+         v.schedule(&plan.gestures);
+@@ -488,6 +489,8 @@ fn render_tracked(v: &mut HumanVoice, out: &mut [f32], artic: bool, tele: bool)
+ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+     let mut artic_out: Option<String> = None;
+     let mut tele_out: Option<String> = None;
++    let mut segments_out: Option<String> = None;
++    let mut plan_only = false;
+     let mut rest = Vec::new();
+     let mut it = a.iter();
+     while let Some(x) = it.next() {
+@@ -495,6 +498,10 @@ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+             artic_out = Some(it.next().ok_or("--artic needs a file")?.clone());
+         } else if x == "--tele" {
+             tele_out = Some(it.next().ok_or("--tele needs a file")?.clone());
++        } else if x == "--segments" {
++            segments_out = Some(it.next().ok_or("--segments needs a file")?.clone());
++        } else if x == "--plan-only" {
++            plan_only = true;
+         } else {
+             rest.push(x.clone());
+         }
+@@ -506,10 +513,16 @@ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+     let b = body(body_name)?;
+     let text = std::fs::read_to_string(input).map_err(|e| format!("{input}: {e}"))?;
+     let j: serde_json::Value = serde_json::from_str(&text).map_err(|e| format!("{input}: {e}"))?;
++    // Optional tract between the presets: {"female": f, "child": c}.
++    let mix: BodyMix = if j["bodyMix"].is_null() { body_name.into() } else { serde_json::from_value(j["bodyMix"].clone()).map_err(|e| format!("bodyMix: {e}"))? };
++    let b = if j["bodyMix"].is_null() { b } else { mix.body() };
+     let bpm = j["bpm"].as_f64().ok_or("bpm missing")?;
+     let vibrato = j["vibrato"].as_f64().unwrap_or(35.0);
+     let raw: Vec<[f64; 2]> = serde_json::from_value(j["notes"].clone()).map_err(|e| format!("notes: {e}"))?;
+-    let g = g2p()?;
++    let mut g = g2p()?;
++    if let Some(m) = j["lexicon"].as_object() {
++        g.add_lexicon(m.iter().filter_map(|(w, p)| p.as_str().map(|p| (w.as_str(), p))));
++    }
+     let syl = lyrics_to_syllables(j["lyrics"].as_str().ok_or("lyrics missing")?, &g);
+     let sounding = raw.iter().filter(|n| n[0] > 0.0).count();
+     if syl.len() != sounding {
+@@ -527,15 +540,31 @@ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+         tension: Some(0.55),
+         ..Default::default()
+     });
++    // Optional voice profile: source settings, turbulence gains (multipliers), a per-render planner
++    // setup and gestures from an outside performance planner. All absent keeps the stock render.
++    if !j["source"].is_null() {
++        let p: SourcePatch = serde_json::from_value(j["source"].clone()).map_err(|e| format!("source: {e}"))?;
++        v.set_source(&p);
++    }
++    let ng = &j["noiseGain"];
++    v.airway.noise_gain.glottis *= ng["glottis"].as_f64().unwrap_or(1.0);
++    v.airway.noise_gain.constriction *= ng["constriction"].as_f64().unwrap_or(1.0);
++    v.airway.noise_gain.teeth *= ng["teeth"].as_f64().unwrap_or(1.0);
++    let consonant_scale = j["consonantScale"].as_f64().unwrap_or(0.0);
++    let fricative_scale = j["fricativeScale"].as_f64().unwrap_or(0.0);
++    let external_vibrato = j["externalVibrato"].as_bool().unwrap_or(false);
++    let rules = j["phonologyRules"].as_bool().unwrap_or(false);
++    let mut planned = Vec::new();
+     let (mut t, mut k, mut end) = (t0, 0usize, 0.0f64);
+     let mut phrase: Vec<SungNote> = Vec::new();
+     let mut start = t;
+-    let flush = |phrase: &mut Vec<SungNote>, start: f64, v: &mut HumanVoice, end: &mut f64| {
++    let mut flush = |phrase: &mut Vec<SungNote>, start: f64, v: &mut HumanVoice, end: &mut f64| {
+         if phrase.is_empty() {
+             return;
+         }
+-        let plan = plan_song(phrase, &SongOptions { body: body_name.into(), bpm, t0: start, vibrato });
++        let plan = plan_song(phrase, &SongOptions { body: mix, bpm, t0: start, vibrato, consonant_scale, fricative_scale, external_vibrato, rules });
+         v.schedule(&plan.gestures);
++        planned.extend(plan.segments.iter().cloned());
+         *end = js_max(*end, plan.end);
+         phrase.clear();
+     };
+@@ -552,6 +581,14 @@ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+         t += n[1] * beat;
+     }
+     flush(&mut phrase, start, &mut v, &mut end);
++    if !j["gestures"].is_null() {
++        let extra: Vec<Gesture> = serde_json::from_value(j["gestures"].clone()).map_err(|e| format!("gestures: {e}"))?;
++        v.schedule(&extra);
++    }
++    if plan_only {
++        let path = segments_out.as_ref().ok_or("--plan-only needs --segments")?;
++        return std::fs::write(path, serde_json::to_string(&planned).map_err(|e| e.to_string())?).map_err(|e| format!("{path}: {e}"));
++    }
+     let n = js_round(FS * (end + 0.4)) as usize;
+     let mut out = vec![0f32; n];
+     let (frames, rec) = if artic_out.is_some() || tele_out.is_some() {
+@@ -562,6 +599,9 @@ pub fn notes(ctx: &Ctx, a: &[String]) -> Result<(), String> {
+     };
+     ctx.write_wav(&out_name, &out)?;
+     println!("{out_name}: {} s, peak {}, {} notes", fixed(n as f64 / FS, 2), fixed(peak(&out), 3), sounding);
++    if let Some(path) = &segments_out {
++        std::fs::write(path, serde_json::to_string(&planned).map_err(|e| e.to_string())?).map_err(|e| format!("{path}: {e}"))?;
++    }
+     if let Some(path) = &artic_out {
+         let j = serde_json::json!({"rate": ARTIC_RATE, "body": body_name, "keys": ArticKey::NAMES, "frames": frames});
+         std::fs::write(path, j.to_string()).map_err(|e| format!("{path}: {e}"))?;
+diff --git a/crates/chimera/src/control/score.rs b/crates/chimera/src/control/score.rs
+index d803f4a..b8d2b65 100644
+--- a/crates/chimera/src/control/score.rs
++++ b/crates/chimera/src/control/score.rs
+@@ -26,9 +26,13 @@ pub enum SourceKey {
+     F0,
+     /// vibrato depth (cents): singers let it bloom a few hundred ms into a held note
+     Vibrato,
++    /// vocal-fold tension 0..1, per note
++    Tension,
++    /// vibrato rate (Hz), per note
++    VibratoRate,
+ }
+ 
+-pub const N_SOURCE: usize = 5;
++pub const N_SOURCE: usize = 7;
+ /// Articulators then source channels.
+ pub const N_CONTROL: usize = N_ARTIC + N_SOURCE;
+ 
+@@ -39,7 +43,7 @@ pub enum ControlKey {
+     Source(SourceKey),
+ }
+ 
+-pub const SOURCE_NAMES: [&str; N_SOURCE] = ["abduction", "closure", "breath", "f0", "vibrato"];
++pub const SOURCE_NAMES: [&str; N_SOURCE] = ["abduction", "closure", "breath", "f0", "vibrato", "tension", "vibratoRate"];
+ 
+ impl ControlKey {
+     pub const ABDUCTION: ControlKey = ControlKey::Source(SourceKey::Abduction);
+@@ -47,6 +51,8 @@ impl ControlKey {
+     pub const BREATH: ControlKey = ControlKey::Source(SourceKey::Breath);
+     pub const F0: ControlKey = ControlKey::Source(SourceKey::F0);
+     pub const VIBRATO: ControlKey = ControlKey::Source(SourceKey::Vibrato);
++    pub const TENSION: ControlKey = ControlKey::Source(SourceKey::Tension);
++    pub const VIBRATO_RATE: ControlKey = ControlKey::Source(SourceKey::VibratoRate);
+ 
+     #[inline]
+     pub fn index(self) -> usize {
+@@ -59,7 +65,7 @@ impl ControlKey {
+         if i < N_ARTIC {
+             ControlKey::Artic(ArticKey::ALL[i])
+         } else {
+-            ControlKey::Source([SourceKey::Abduction, SourceKey::Closure, SourceKey::Breath, SourceKey::F0, SourceKey::Vibrato][i - N_ARTIC])
++            ControlKey::Source([SourceKey::Abduction, SourceKey::Closure, SourceKey::Breath, SourceKey::F0, SourceKey::Vibrato, SourceKey::Tension, SourceKey::VibratoRate][i - N_ARTIC])
+         }
+     }
+     pub fn name(self) -> &'static str {
+diff --git a/crates/chimera/src/phonetics/english.rs b/crates/chimera/src/phonetics/english.rs
+index b48c3b0..44634c8 100644
+--- a/crates/chimera/src/phonetics/english.rs
++++ b/crates/chimera/src/phonetics/english.rs
+@@ -26,6 +26,8 @@ fn arpa(base: &str) -> Option<&'static str> {
+         "UW" => "u",
+         "B" => "b",
+         "CH" => "tʃ",
++        // not ARPAbet: voiceless unaspirated retroflex affricate, for lexicon entries only
++        "TSR" => "ʈʂ",
+         "D" => "d",
+         "DH" => "ð",
+         "F" => "f",
+@@ -95,6 +97,8 @@ pub struct Phrase {
+ #[derive(Clone, Debug, Default)]
+ pub struct EnglishG2P {
+     dict: Option<HashMap<String, String>>,
++    /// per-render pronunciations; they win over the dictionary and the homograph table
++    lexicon: HashMap<String, String>,
+ }
+ 
+ /// JS `\s` (and what `String.prototype.trim` removes).
+@@ -128,6 +132,11 @@ impl EnglishG2P {
+         self.dict = Some(m);
+     }
+ 
++    /// Add per-render pronunciations ("word" → phones), for sequences English spelling cannot reach.
++    pub fn add_lexicon<'a>(&mut self, entries: impl IntoIterator<Item = (&'a str, &'a str)>) {
++        self.lexicon.extend(entries.into_iter().map(|(w, p)| (w.to_lowercase(), p.to_string())));
++    }
++
+     /// Text → phrases of segments.
+     pub fn to_phrases(&self, text: &str) -> Vec<Phrase> {
+         let mut phrases: Vec<Phrase> = Vec::new();
+@@ -180,7 +189,7 @@ impl EnglishG2P {
+     pub fn word(&self, w: &str, reduce: bool) -> Vec<Segment> {
+         let lower = w.to_lowercase();
+         let clean = lower.trim_matches('\'');
+-        let entry = homograph(clean).or_else(|| self.dict.as_ref().and_then(|d| d.get(clean)).map(String::as_str));
++        let entry = self.lexicon.get(clean).map(String::as_str).or_else(|| homograph(clean)).or_else(|| self.dict.as_ref().and_then(|d| d.get(clean)).map(String::as_str));
+         if let Some(entry) = entry.filter(|e| !e.is_empty()) {
+             let mut segs = arpabet_to_segments(entry);
+             if reduce && is_function_word(clean) {
+diff --git a/crates/chimera/src/phonetics/inventory.rs b/crates/chimera/src/phonetics/inventory.rs
+index b7d92d0..7776b0a 100644
+--- a/crates/chimera/src/phonetics/inventory.rs
++++ b/crates/chimera/src/phonetics/inventory.rs
+@@ -86,6 +86,9 @@ pub struct PhonemeDef {
+     /// glottal-only segments
+     #[serde(skip_serializing_if = "Option::is_none")]
+     pub glottal: Option<Glottal>,
++    /// a voiceless stop or affricate that is never aspirated, whatever follows it
++    #[serde(skip_serializing_if = "std::ops::Not::not")]
++    pub unaspirated: bool,
+ }
+ 
+ use ArticKey::*;
+@@ -109,7 +112,7 @@ fn tg(a: Tg, b: Tg) -> ArticPatch {
+ 
+ #[allow(clippy::too_many_arguments)]
+ fn c(ipa: &'static str, name: &'static str, manner: Manner, voicing: Voicing, place: &'static str, targets: ArticPatch, dominant: &'static [ArticKey], dur: f64) -> PhonemeDef {
+-    PhonemeDef { ipa, name, manner, voicing, place, targets, dominant, nasal: None, dur, area: None, cal_key: None, release: None, glottal: None }
++    PhonemeDef { ipa, name, manner, voicing, place, targets, dominant, nasal: None, dur, area: None, cal_key: None, release: None, glottal: None, unaspirated: false }
+ }
+ 
+ impl PhonemeDef {
+@@ -130,6 +133,10 @@ impl PhonemeDef {
+         self.glottal = Some(g);
+         self
+     }
++    fn unasp(mut self) -> Self {
++        self.unaspirated = true;
++        self
++    }
+ }
+ 
+ // place templates
+@@ -203,6 +210,7 @@ fn base() -> Vec<PhonemeDef> {
+         c("dz", "voiced alveolar affricate", M::Affricate, Voiced, "alveolar", t(ALV_STOP), &TIP, 0.12).rel("z"),
+         c("tʃ", "voiceless postalveolar affricate", M::Affricate, Voiceless, "postalveolar", tg(POSTALV_STOP, &[(LipProt, 0.75), (LipWidth, 0.2)]), &[TtX, TtY, LipProt, LipWidth], 0.15).rel("ʃ"),
+         c("dʒ", "voiced postalveolar affricate", M::Affricate, Voiced, "postalveolar", tg(POSTALV_STOP, &[(LipProt, 0.75), (LipWidth, 0.2)]), &[TtX, TtY, LipProt, LipWidth], 0.13).rel("ʒ"),
++        c("ʈʂ", "voiceless unaspirated retroflex affricate", M::Affricate, Voiceless, "retroflex", t(RETRO_STOP), TIP_CURL, 0.13).rel("ʂ").unasp(),
+         c("pf", "voiceless labiodental affricate", M::Affricate, Voiceless, "labiodental", t(BILABIAL), &LIPS, 0.14).rel("f"),
+         // approximants, laterals, taps, trills
+         c("w", "labial-velar approximant", M::Approximant, Voiced, "labial-velar", t(&[(LipAp, 0.28), (LipProt, 1.0), (LipWidth, 0.05), (TbX, 2.45), (TbY, 7.45)]), &[LipAp, LipProt, LipWidth, TbX, TbY], 0.06),
+diff --git a/crates/chimera/src/phonetics/ipa.rs b/crates/chimera/src/phonetics/ipa.rs
+index 8337b68..a7c5faa 100644
+--- a/crates/chimera/src/phonetics/ipa.rs
++++ b/crates/chimera/src/phonetics/ipa.rs
+@@ -6,7 +6,7 @@ use std::collections::{HashMap, HashSet};
+ use std::sync::OnceLock;
+ 
+ const VOWEL_CHARS: &str = "iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒɝɚ";
+-const MULTI: [&str; 10] = ["tʃ", "dʒ", "ts", "dz", "pf", "aɪ", "aʊ", "ɔɪ", "eɪ", "oʊ"];
++const MULTI: [&str; 11] = ["tʃ", "dʒ", "ʈʂ", "ts", "dz", "pf", "aɪ", "aʊ", "ɔɪ", "eɪ", "oʊ"];
+ const ALIASES: [(&str, &str); 9] = [("t͡ʃ", "tʃ"), ("d͡ʒ", "dʒ"), ("t͡s", "ts"), ("d͡z", "dz"), ("ɡ", "g"), ("ʧ", "tʃ"), ("ʤ", "dʒ"), ("r̥", "r"), ("ɐ̯", "ɐ")];
+ 
+ 
+diff --git a/crates/chimera/src/phonetics/mod.rs b/crates/chimera/src/phonetics/mod.rs
+index 3c45df6..54d30a7 100644
+--- a/crates/chimera/src/phonetics/mod.rs
++++ b/crates/chimera/src/phonetics/mod.rs
+@@ -33,6 +33,9 @@ pub struct Segment {
+     /// word boundary after this segment
+     #[serde(default, skip_serializing_if = "Option::is_none")]
+     pub word_end: Option<bool>,
++    /// syllable coda position (a sung plan marks it, so phonological rules can see syllable structure)
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub coda: Option<bool>,
+ }
+ 
+ impl Segment {
+diff --git a/crates/chimera/src/phonetics/planner.rs b/crates/chimera/src/phonetics/planner.rs
+index 0a2f971..36a0b0b 100644
+--- a/crates/chimera/src/phonetics/planner.rs
++++ b/crates/chimera/src/phonetics/planner.rs
+@@ -138,6 +138,10 @@ pub struct PlanOptions {
+     /// fit short notes. Speech and live notes leave it unset.
+     #[serde(default, skip_serializing_if = "Option::is_none")]
+     pub sung: Option<bool>,
++    /// the phonological rules that need syllable structure and overlap planning (see `sing.rs`);
++    /// unset keeps the stock plan, so older score files render as they did
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub rules: Option<bool>,
+ }
+ 
+ /// JS truthiness of an optional number (`if (s.f0)`: 0 and NaN are false).
+@@ -170,6 +174,7 @@ struct Seg<'a> {
+     def: Option<PhonemeDef>,
+     vowel: Option<ArticPatch>,
+     glide_from: bool,
++    coda: bool,
+ }
+ 
+ #[derive(Clone, Copy)]
+@@ -196,10 +201,10 @@ pub fn plan_utterance(input: &[Segment], o: &PlanOptions) -> Plan {
+             let base = durs[si];
+             for (i, p) in parts.iter().enumerate() {
+                 let dur = if parts.len() > 1 { base * (if i == 0 { 0.55 } else { 0.45 }) } else { base };
+-                segs.push(Seg { ipa: p, dur: Some(dur), stress: s.stress, f0: s.f0, def: None, vowel: None, glide_from: i > 0 });
++                segs.push(Seg { ipa: p, dur: Some(dur), stress: s.stress, f0: s.f0, def: None, vowel: None, glide_from: i > 0, coda: s.coda == Some(true) });
+             }
+         } else {
+-            segs.push(Seg { ipa: &s.ipa, dur: Some(durs[si]), stress: s.stress, f0: s.f0, def: None, vowel: None, glide_from: false });
++            segs.push(Seg { ipa: &s.ipa, dur: Some(durs[si]), stress: s.stress, f0: s.f0, def: None, vowel: None, glide_from: false, coda: s.coda == Some(true) });
+         }
+     }
+     for s in segs.iter_mut() {
+@@ -261,6 +266,9 @@ pub fn plan_utterance(input: &[Segment], o: &PlanOptions) -> Plan {
+         let Some(def) = s.def.as_ref() else { continue };
+         let next_vowel = i < segs.len() - 1 && segs[i + 1].vowel.is_some();
+         let prev_seg = if i > 0 { Some(&segs[i - 1]) } else { None };
++        let rules = o.rules == Some(true);
++        // the velum and the dorsum of a /ŋ/ finish before a following tongue-tip gesture starts
++        let a0 = t0 + if rules && prev_seg.is_some_and(|p| p.def.is_some_and(|d| d.nasal == Some(true) && d.place == "velar")) { js_min(tip_delay_after_velar_nasal(def), js_max(0.0, dur - 0.03)) } else { 0.0 };
+         let mut add_oral = |tg: &ArticPatch, a: f64, b: f64, speed: f64, label: &str| oral_gestures_into(def, tg, a, b, speed, label, &mut gestures);
+         match def.manner {
+             // a stop that closes behind another stop's closure, its articulator already placed by
+@@ -270,8 +278,8 @@ pub fn plan_utterance(input: &[Segment], o: &PlanOptions) -> Plan {
+             // The delay leaves the closure 30 ms before its release (its 10 ms minimum hold and
+             // its ~20 ms early release), so a short sung stop isn't pushed past its own end.
+             Manner::Stop if pre_placed_behind_closure(&segs, i) => add_oral(&def.targets, t0 + js_min(PLACED_CLOSURE_DELAY, js_max(0.0, dur - 0.03)), t1, 1.55, def.ipa),
+-            Manner::Stop | Manner::Nasal => add_oral(&def.targets, t0, t1, 1.55, def.ipa),
+-            Manner::Tap => add_oral(&def.targets, t0, t1, 2.8, def.ipa),
++            Manner::Stop | Manner::Nasal => add_oral(&def.targets, a0, t1, 1.55, def.ipa),
++            Manner::Tap => add_oral(&def.targets, a0, t1, 2.8, def.ipa),
+             Manner::Trill => {
+                 // driven trill: rapid alternation of near-closure and release at ~26 Hz
+                 let n = js_max(2.0, js_round(dur * 26.0));
+@@ -283,14 +291,14 @@ pub fn plan_utterance(input: &[Segment], o: &PlanOptions) -> Plan {
+                 }
+             }
+             Manner::Affricate => {
+-                let split = t0 + dur * 0.55;
+-                add_oral(&def.targets, t0, split, 2.0, def.ipa);
++                let split = a0 + (t1 - a0) * 0.55;
++                add_oral(&def.targets, a0, split, 2.0, def.ipa);
+                 let rel = def.release.and_then(|r| phoneme(r, body));
+                 if let Some(rel) = rel {
+                     add_oral(&rel.targets, split + 0.008, t1, 1.4, def.ipa);
+                 }
+             }
+-            Manner::Fricative | Manner::Approximant | Manner::Lateral => add_oral(&def.targets, t0, t1, 1.3, def.ipa),
++            Manner::Fricative | Manner::Approximant | Manner::Lateral => add_oral(&def.targets, a0, t1, 1.3, def.ipa),
+             Manner::Glottal | Manner::Vowel => {}
+         }
+         // nasality: the velum lowers in anticipation (into the preceding vowel, as in English) and
+@@ -309,11 +317,13 @@ pub fn plan_utterance(input: &[Segment], o: &PlanOptions) -> Plan {
+         } else if def.voicing == Voicing::Voiceless {
+             if def.manner == Manner::Stop || def.manner == Manner::Affricate {
+                 // aspirated when syllable-initial before a vowel and not after /s/ (English-like)
+-                let aspirated = next_vowel && !prev_seg.is_some_and(|p| p.ipa == "s");
++                // with the rules on: an onset stop looks through glides and liquids to its vowel (/kw tw pl/), and a coda stop is not an onset
++                let releases_to_vowel = if rules { !s.coda && (next_vowel || (def.manner == Manner::Stop && vowel_through_glides(&segs, i))) } else { next_vowel };
++                let aspirated = releases_to_vowel && !def.unaspirated && !prev_seg.is_some_and(|p| p.ipa == "s");
+                 let vot = if aspirated { 0.05 / rate } else { 0.012 };
+-                gestures.push(Gesture::new(t0 + 0.25 * dur, t1 + vot * 0.4, 0.035, if aspirated { 0.045 } else { 0.02 }, 6.0, one(ControlKey::ABDUCTION, if aspirated { 0.36 } else { 0.22 })).label("aspiration"));
++                gestures.push(Gesture::new(a0 + 0.25 * (t1 - a0), t1 + vot * 0.4, 0.035, if aspirated { 0.045 } else { 0.02 }, 6.0, one(ControlKey::ABDUCTION, if aspirated { 0.36 } else { 0.22 })).label("aspiration"));
+             } else {
+-                gestures.push(Gesture::new(t0 - 0.015, t1 + 0.005, 0.03, 0.03, 6.0, one(ControlKey::ABDUCTION, 0.3)).label("voiceless"));
++                gestures.push(Gesture::new(a0 - 0.015, t1 + 0.005, 0.03, 0.03, 6.0, one(ControlKey::ABDUCTION, 0.3)).label("voiceless"));
+             }
+         } else if def.manner == Manner::Fricative {
+             gestures.push(Gesture::new(t0, t1, 0.03, 0.03, 3.0, one(ControlKey::ABDUCTION, 0.035)).label("voiced frication"));
+@@ -418,6 +428,25 @@ fn place_rank(place: &str) -> Option<u8> {
+ /// shorter travel saves, so it seals as the front closure opens.
+ const PLACED_CLOSURE_DELAY: f64 = 0.025;
+ 
++/// How far a coronal gesture after /ŋ/ is aimed past the start of its segment (s): its activation
++/// (`early` lead and 30 ms ramp in [`oral_gestures_into`]) then starts 10 ms after the segment
++/// does, when the velar closure has released and the velum has closed. 0 without a tip gesture.
++pub fn tip_delay_after_velar_nasal(def: &PhonemeDef) -> f64 {
++    if !def.dominant.contains(&ArticKey::TtY) {
++        return 0.0;
++    }
++    if matches!(def.manner, Manner::Stop | Manner::Nasal | Manner::Affricate) { 0.071 } else { 0.048 }
++}
++
++/// Whether the consonant at `i` reaches a vowel through onset glides and liquids only.
++fn vowel_through_glides(segs: &[Seg], i: usize) -> bool {
++    let mut k = i + 1;
++    while k < segs.len() && !segs[k].coda && segs[k].def.is_some_and(|d| matches!(d.manner, Manner::Approximant | Manner::Lateral)) {
++        k += 1;
++    }
++    k > i + 1 && k < segs.len() && segs[k].vowel.is_some()
++}
++
+ /// Whether stop `i` closes behind the closure of the stop before it, with its own articulators
+ /// already set by the consonant before that one (/t/ in /ɹpt/: the tip is up for the /ɹ/ and
+ /// stays free during the lip closure; a rhotic vowel raises it too). After any other vowel ("apt",
+diff --git a/crates/chimera/src/phonetics/sing.rs b/crates/chimera/src/phonetics/sing.rs
+index d42f25e..275a4b8 100644
+--- a/crates/chimera/src/phonetics/sing.rs
++++ b/crates/chimera/src/phonetics/sing.rs
+@@ -11,9 +11,9 @@
+ //!
+ //! These planners allocate (they run off the audio thread).
+ 
+-use super::inventory::phoneme;
++use super::inventory::{Manner, phoneme};
+ use crate::anatomy::human::BodyMix;
+-use super::planner::{PlanOptions, diphthong_parts, plan_utterance};
++use super::planner::{PlanOptions, diphthong_parts, plan_utterance, tip_delay_after_velar_nasal};
+ use super::{Intonation, Plan, PlannedSegment, Segment, Syllable};
+ use crate::control::score::{ControlKey, Gesture, Targets};
+ use crate::math::{js_max, js_min};
+@@ -31,6 +31,69 @@ fn consonants(segs: &[Segment], body: BodyMix, k: f64) -> Vec<Segment> {
+     segs.iter().map(|c| Segment { ipa: c.ipa.clone(), dur: Some(cdur(&c.ipa, body, k)), ..Default::default() }).collect()
+ }
+ 
++/// Shorten fricatives on top of the common consonant scale.
++fn scale_fricatives(segs: &mut [Segment], body: BodyMix, k: f64) {
++    if k > 0.0 {
++        for c in segs.iter_mut().filter(|c| phoneme(&c.ipa, body).is_some_and(|d| matches!(d.manner, Manner::Fricative))) {
++            c.dur = c.dur.map(|d| d * k);
++        }
++    }
++}
++
++/// a phrase-final sung nasal holds at least this long (s), but at most [`FINAL_NASAL_SHARE`] of its note
++const FINAL_NASAL_HOLD: f64 = 0.13;
++const FINAL_NASAL_SHARE: f64 = 0.3;
++/// a word-final stop before a vowel-initial word: its closure is this much longer, and a glottal
++/// onset of this length (s) keeps its release from becoming the next syllable's onset
++const LINKED_STOP_HOLD: f64 = 1.5;
++const LINKING_GLOTTAL: f64 = 0.035;
++
++/// Phonological rules over a phrase's onsets and codas (notes `i..=j`), before they are fitted:
++/// coda allophones, phrase-final nasals, /ŋ/ before a coronal, word-final stops before a vowel,
++/// and word-initial /s/ after a consonant.
++fn apply_rules(notes: &[SungNote], i: usize, onsets: &mut [Vec<Segment>], codas: &mut [Vec<Segment>], beat: f64, o: &SongOptions) {
++    let mdef = |c: &Segment| phoneme(&c.ipa, o.body);
++    let manner = |c: &Segment, m: Manner| mdef(c).is_some_and(|d| d.manner == m);
++    for n in 0..onsets.len() {
++        let k = i + n;
++        for c in codas[n].iter_mut() {
++            c.coda = Some(true);
++            if c.ipa == "l" {
++                c.dur = c.dur.map(|d| d * phoneme("ɫ", o.body).map_or(1.0, |x| x.dur) / phoneme("l", o.body).map_or(1.0, |x| x.dur));
++                c.ipa = "ɫ".to_string();
++            }
++        }
++        if n + 1 == onsets.len() {
++            if let Some(c) = codas[n].last_mut().filter(|c| manner(c, Manner::Nasal)) {
++                c.dur = c.dur.map(|d| js_max(d, js_min(FINAL_NASAL_HOLD, FINAL_NASAL_SHARE * notes[k].beats * beat)));
++            }
++            continue;
++        }
++        let word_ends = last_of_chain(notes, k).word_end;
++        let coda = &mut codas[n];
++        let next = &mut onsets[n + 1];
++        let velar_nasal = coda.last().is_some_and(|c| mdef(c).is_some_and(|d| d.nasal == Some(true) && d.place == "velar"));
++        if velar_nasal
++            && let Some(c) = next.first_mut()
++            && let Some(d) = mdef(c)
++        {
++            c.dur = c.dur.map(|x| x + tip_delay_after_velar_nasal(&d));
++        }
++        if word_ends && next.is_empty() && !melisma(&notes[k + 1].syl) && coda.last().is_some_and(|c| manner(c, Manner::Stop)) {
++            let c = coda.last_mut().unwrap();
++            c.dur = c.dur.map(|d| d * LINKED_STOP_HOLD);
++            next.push(Segment { ipa: "ʔ".to_string(), dur: Some(LINKING_GLOTTAL), f0: Some(midi_to_hz(notes[k + 1].midi)), ..Default::default() });
++        }
++        if word_ends
++            && !coda.is_empty()
++            && o.fricative_scale > 0.0
++            && let Some(c) = next.first_mut().filter(|c| c.ipa == "s")
++        {
++            c.dur = c.dur.map(|d| d / o.fricative_scale);
++        }
++    }
++}
++
+ /// Sung consonants at their note's pitch: an onset consonant moves the pitch to the new note
+ /// before its vowel (as singers do), a coda holds the old one.
+ fn consonants_at(segs: &[Segment], body: BodyMix, k: f64, hz: f64) -> Vec<Segment> {
+@@ -91,6 +154,18 @@ pub struct SongOptions {
+     pub t0: f64,
+     /// vibrato depth (cents) on held vowels
+     pub vibrato: f64,
++    /// onset and coda consonant length against the spoken one; 0 keeps the default (0.8)
++    #[serde(default)]
++    pub consonant_scale: f64,
++    /// further scale on fricatives only; 0 keeps them at the consonant scale
++    #[serde(default)]
++    pub fricative_scale: f64,
++    /// the caller schedules its own per-note vibrato gestures
++    #[serde(default)]
++    pub external_vibrato: bool,
++    /// the phonological rules of [`apply_rules`] and the planner; off keeps the stock plan
++    #[serde(default)]
++    pub rules: bool,
+ }
+ 
+ fn melisma(s: &Syllable) -> bool {
+@@ -120,10 +195,17 @@ pub fn plan_song(notes: &[SungNote], o: &SongOptions) -> Plan {
+         // each note's onset and coda consonants, at the note's pitch (a coda at the pitch of the
+         // note whose syllable it ends; a melisma has neither)
+         let hz_of = |k: usize| midi_to_hz(notes[k].midi);
+-        let mut onsets: Vec<Vec<Segment>> = (i..=j).map(|k| if melisma(&notes[k].syl) { Vec::new() } else { consonants_at(&notes[k].syl.onset, o.body, 0.8, hz_of(k)) }).collect();
++        let ck = if o.consonant_scale > 0.0 { o.consonant_scale } else { 0.8 };
++        let mut onsets: Vec<Vec<Segment>> = (i..=j).map(|k| if melisma(&notes[k].syl) { Vec::new() } else { consonants_at(&notes[k].syl.onset, o.body, ck, hz_of(k)) }).collect();
+         let mut codas: Vec<Vec<Segment>> = (i..=j)
+-            .map(|k| if k < j && melisma(&notes[k + 1].syl) { Vec::new() } else { consonants_at(&last_of_chain(notes, k).coda, o.body, 0.8, hz_of(k)) })
++            .map(|k| if k < j && melisma(&notes[k + 1].syl) { Vec::new() } else { consonants_at(&last_of_chain(notes, k).coda, o.body, ck, hz_of(k)) })
+             .collect();
++        for c in onsets.iter_mut().chain(codas.iter_mut()) {
++            scale_fricatives(c, o.body, o.fricative_scale);
++        }
++        if o.rules {
++            apply_rules(notes, i, &mut onsets, &mut codas, beat, o);
++        }
+         // the phrase's last vowel leaves a short breath before the next phrase. The call's last
+         // phrase is followed by a rest (callers split phrases at rests), so the breath comes from
+         // the rest: hold that note to its end, less the breath's release.
+@@ -148,12 +230,12 @@ pub fn plan_song(notes: &[SungNote], o: &SongOptions) -> Plan {
+             let parts = diphthong_parts(&n.syl.nucleus.ipa);
+             match parts {
+                 Some((a, b)) if !next_melisma => {
+-                    segs.push(Segment { ipa: a.to_string(), dur: Some(vdur * 0.8), f0: Some(hz), stress: Some(1), word_end: None });
+-                    segs.push(Segment { ipa: b.to_string(), dur: Some(vdur * 0.2), f0: Some(hz), stress: Some(1), word_end: None });
++                    segs.push(Segment { ipa: a.to_string(), dur: Some(vdur * 0.8), f0: Some(hz), stress: Some(1), ..Default::default() });
++                    segs.push(Segment { ipa: b.to_string(), dur: Some(vdur * 0.2), f0: Some(hz), stress: Some(1), ..Default::default() });
+                 }
+                 _ => {
+                     let ipa = parts.map_or(n.syl.nucleus.ipa.clone(), |p| p.0.to_string());
+-                    segs.push(Segment { ipa, dur: Some(vdur), f0: Some(hz), stress: Some(1), word_end: None });
++                    segs.push(Segment { ipa, dur: Some(vdur), f0: Some(hz), stress: Some(1), ..Default::default() });
+                 }
+             }
+             segs.extend(coda);
+@@ -161,11 +243,11 @@ pub fn plan_song(notes: &[SungNote], o: &SongOptions) -> Plan {
+         }
+         if !segs.is_empty() {
+             // the planner lays segments out from t0 + 0.06: start so the first vowel lands on its beat
+-            let plan = plan_utterance(&segs, &PlanOptions { body: o.body, t0: times[i] - first_onset - 0.06, f0: Some(hz_of(i)), intonation: Some(Intonation::Flat), sung: Some(true), ..Default::default() });
++            let plan = plan_utterance(&segs, &PlanOptions { body: o.body, t0: times[i] - first_onset - 0.06, f0: Some(hz_of(i)), intonation: Some(Intonation::Flat), sung: Some(true), rules: o.rules.then_some(true), ..Default::default() });
+             gestures.extend_from_slice(&plan.gestures);
+             segments.extend(plan.segments);
+             for (a, b) in vowel_spans {
+-                if b - a > 0.3 {
++                if b - a > 0.3 && !o.external_vibrato {
+                     gestures.push(vibrato_gesture(a, b, o.vibrato, None));
+                 }
+             }
+@@ -219,7 +301,7 @@ pub fn plan_note_on(syl: &Syllable, midi: f64, o: &NoteOnOptions) -> Vec<Gesture
+     }
+     segs.extend(consonants(&syl.onset, o.body, 0.7));
+     let parts = diphthong_parts(&syl.nucleus.ipa);
+-    segs.push(Segment { ipa: parts.map_or(syl.nucleus.ipa.clone(), |p| p.0.to_string()), dur: Some(HOLD), f0: Some(hz), stress: Some(1), word_end: None });
++    segs.push(Segment { ipa: parts.map_or(syl.nucleus.ipa.clone(), |p| p.0.to_string()), dur: Some(HOLD), f0: Some(hz), stress: Some(1), ..Default::default() });
+     let plan = plan_utterance(&segs, &PlanOptions { body: o.body, t0: LIVE_T0, f0: Some(hz), intonation: Some(Intonation::Flat), open_end: Some(true), ..Default::default() });
+     let vowel = &plan.segments[plan.segments.len() - 1];
+     let mut out: Vec<Gesture> = plan.gestures.iter().map(|g| g.tag(if g.targets.has(ControlKey::F0) { o.tag + 1.0 } else { o.tag })).collect();
+@@ -258,7 +340,7 @@ fn tail(syl: &Syllable, body: BodyMix, hz: f64) -> Vec<Segment> {
+     let parts = diphthong_parts(&syl.nucleus.ipa);
+     let mut out: Vec<Segment> = Vec::new();
+     if let Some((_, b)) = parts {
+-        out.push(Segment { ipa: b.to_string(), dur: Some(0.07), stress: Some(1), f0: Some(hz), word_end: None });
++        out.push(Segment { ipa: b.to_string(), dur: Some(0.07), stress: Some(1), f0: Some(hz), ..Default::default() });
+     }
+     out.extend(consonants(&syl.coda, body, 0.7));
+     out
+diff --git a/crates/chimera/src/phonetics/syllables.rs b/crates/chimera/src/phonetics/syllables.rs
+index 40fc7ed..bd41ae7 100644
+--- a/crates/chimera/src/phonetics/syllables.rs
++++ b/crates/chimera/src/phonetics/syllables.rs
+@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
+ // English onsets (IPA), longest first matters only for the search below
+ #[rustfmt::skip]
+ const ONSETS: &[&str] = &[
+-    "p", "b", "t", "d", "k", "g", "f", "v", "θ", "ð", "s", "z", "ʃ", "ʒ", "h", "m", "n", "l", "ɹ", "w", "j", "tʃ", "dʒ",
++    "p", "b", "t", "d", "k", "g", "f", "v", "θ", "ð", "s", "z", "ʃ", "ʒ", "h", "m", "n", "l", "ɹ", "w", "j", "tʃ", "dʒ", "ʈʂ",
+     "pl", "bl", "kl", "gl", "fl", "sl", "pɹ", "bɹ", "tɹ", "dɹ", "kɹ", "gɹ", "fɹ", "θɹ", "ʃɹ",
+     "sp", "st", "sk", "sm", "sn", "sw", "sf", "tw", "kw", "dw", "gw", "θw",
+     "pj", "bj", "kj", "gj", "mj", "nj", "fj", "vj", "hj", "lj",
+diff --git a/crates/chimera/src/voice/human_voice.rs b/crates/chimera/src/voice/human_voice.rs
+index 9092506..ceb7222 100644
+--- a/crates/chimera/src/voice/human_voice.rs
++++ b/crates/chimera/src/voice/human_voice.rs
+@@ -317,17 +317,7 @@ impl HumanVoice {
+         // the arytenoids through the closed phase (Södersten & Lindestad 1990). It leaks a little
+         // air and damps the tract, which lifts H1 and the band below 500 Hz.
+         g.chink = (0.008 + 0.03 * s.breathiness) * k2;
+-        g.open_quotient = 0.78 - 0.36 * s.tension;
+-        // The folds close along their length and depth over a return phase, not all at once, so
+-        // a sung or spoken voice closes softly (0.22 at tension 0.55): an abrupt closure put
+-        // 3-8 dB too much energy above 2 kHz. Pressing harder than that brings the abrupt closure
+-        // back, up to 0.95 at full tension, so a pressed voice still has its edge. Brightness moves
+-        // the closure from there, and shortens or lengthens the closing phase: 0 closes as softly as
+-        // the model allows, 1 about as abruptly as a pressed voice.
+-        let bright = s.brightness - DEFAULT_SOURCE.brightness;
+-        let by_tension = 0.4 * s.tension + 1.375 * js_max(0.0, s.tension - 0.6);
+-        g.closure_sharpness = clamp(by_tension + 0.8 * bright, 0.0, 1.0);
+-        g.skew = 0.56 + 0.16 * s.tension + 0.2 * bright;
++        Self::shape_from_tension(g, s.tension, s.brightness);
+         g.fry = s.fry;
+         // Jitter of a healthy, trained voice at the default roughness (0.1): about 0.45 %, well
+         // under the clinical threshold (MDVP: 1.04 %).
+@@ -340,6 +330,21 @@ impl HumanVoice {
+         g.effort = clamp((s.pressure.abs() - 3.0) / 10.0, 0.0, 1.0);
+     }
+ 
++    /// Pulse shape from tension and brightness.
++    fn shape_from_tension(g: &mut crate::sources::glottis::GlottisParams, tension: f64, brightness: f64) {
++        g.open_quotient = 0.78 - 0.36 * tension;
++        // The folds close along their length and depth over a return phase, not all at once, so
++        // a sung or spoken voice closes softly (0.22 at tension 0.55): an abrupt closure put
++        // 3-8 dB too much energy above 2 kHz. Pressing harder than that brings the abrupt closure
++        // back, up to 0.95 at full tension, so a pressed voice still has its edge. Brightness moves
++        // the closure from there, and shortens or lengthens the closing phase: 0 closes as softly as
++        // the model allows, 1 about as abruptly as a pressed voice.
++        let bright = brightness - DEFAULT_SOURCE.brightness;
++        let by_tension = 0.4 * tension + 1.375 * js_max(0.0, tension - 0.6);
++        g.closure_sharpness = clamp(by_tension + 0.8 * bright, 0.0, 1.0);
++        g.skew = 0.56 + 0.16 * tension + 0.2 * bright;
++    }
++
+     /// Render `out.len()` output samples.
+     pub fn render(&mut self, out: &mut [f32]) {
+         let m = self.m;
+@@ -448,6 +453,11 @@ impl HumanVoice {
+             }
+             let vb = b[ControlKey::VIBRATO.index()];
+             gp.vibrato_depth = if vb.weight > 0.0 { (self.source.vibrato_depth * 0.05 + vb.value * vb.weight) / (0.05 + vb.weight) } else { self.source.vibrato_depth };
++            let tn = b[ControlKey::TENSION.index()];
++            let tension = if tn.weight > 0.0 { (self.source.tension * 0.02 + tn.value * tn.weight) / (0.02 + tn.weight) } else { self.source.tension };
++            Self::shape_from_tension(gp, tension, self.source.brightness);
++            let vr = b[ControlKey::VIBRATO_RATE.index()];
++            gp.vibrato_rate = if vr.weight > 0.0 { (self.source.vibrato_rate * 0.02 + vr.value * vr.weight) / (0.02 + vr.weight) } else { self.source.vibrato_rate };
+             let pf = b[ControlKey::F0.index()];
+             if pf.weight > 0.0 {
+                 f0_target = (self.source.f0 * 0.02 + pf.value * pf.weight) / (0.02 + pf.weight);
+diff --git a/crates/chimera/tests/sing_fast.rs b/crates/chimera/tests/sing_fast.rs
+index 8ead686..4d56d54 100644
+--- a/crates/chimera/tests/sing_fast.rs
++++ b/crates/chimera/tests/sing_fast.rs
+@@ -17,7 +17,7 @@ fn sing(lyrics: &str, beats: f64, bpm: f64) -> (Vec<SungNote>, Vec<f64>, Plan) {
+     let syl = lyrics_to_syllables(lyrics, &g2p());
+     let notes: Vec<SungNote> = syl.iter().enumerate().map(|(i, s)| SungNote { midi: if i % 2 == 0 { 60.0 } else { 64.0 }, beats, syl: s.clone() }).collect();
+     let times = (0..notes.len()).map(|i| 0.5 + i as f64 * beats * 60.0 / bpm).collect();
+-    let plan = plan_song(&notes, &SongOptions { body: "male".into(), bpm, t0: 0.5, vibrato: 0.0 });
++    let plan = plan_song(&notes, &SongOptions { body: "male".into(), bpm, t0: 0.5, vibrato: 0.0, ..Default::default() });
+     (notes, times, plan)
+ }
+ 
+@@ -84,7 +84,7 @@ fn a_delayed_cluster_closure_stays_inside_a_short_sung_stop() {
+     g.load_dict("harped\tHH AA1 R P T\nah\tAA1\n");
+     let syl = lyrics_to_syllables("harped ah harped ah", &g);
+     let notes: Vec<SungNote> = syl.iter().map(|s| SungNote { midi: 60.0, beats: 0.25, syl: s.clone() }).collect();
+-    let plan = plan_song(&notes, &SongOptions { body: "male".into(), bpm: 180.0, t0: 0.5, vibrato: 0.0 });
++    let plan = plan_song(&notes, &SongOptions { body: "male".into(), bpm: 180.0, t0: 0.5, vibrato: 0.0, ..Default::default() });
+     let ts: Vec<_> = plan.segments.iter().enumerate().filter(|(i, s)| s.ipa == "t" && *i > 0 && plan.segments[i - 1].ipa == "p").map(|(_, s)| s.clone()).collect();
+     assert!(!ts.is_empty());
+     for t in ts {
+diff --git a/crates/chimera/tests/sing_rules.rs b/crates/chimera/tests/sing_rules.rs
+new file mode 100644
+index 0000000..0a375d9
+--- /dev/null
++++ b/crates/chimera/tests/sing_rules.rs
+@@ -0,0 +1,98 @@
++//! The phonological rules behind `SongOptions::rules`, each on its general pattern.
++
++use chimera::control::score::ControlKey;
++use chimera::phonetics::Plan;
++use chimera::phonetics::english::{EnglishG2P, arpabet_to_segments};
++use chimera::phonetics::sing::{SongOptions, SungNote, plan_song};
++use chimera::phonetics::syllables::lyrics_to_syllables;
++
++fn g2p() -> EnglishG2P {
++    let mut g = EnglishG2P::new();
++    g.load_dict("twin\tT W IH1 N\ntin\tT IH1 N\nspin\tS P IH1 N\nup\tAH1 P\na\tAH0\nsing\tS IH1 NG\nto\tT UW1\nbell\tB EH1 L\nworld\tW ER1 L D\nso\tS OW1\nthe\tDH AH0\nsky\tS K AY1\nkeep\tK IY1 P\nwe\tW IY1\n");
++    g
++}
++
++fn plan(lyrics: &str, rules: bool) -> Plan {
++    let syl = lyrics_to_syllables(lyrics, &g2p());
++    let notes: Vec<SungNote> = syl.iter().map(|s| SungNote { midi: 60.0, beats: 1.0, syl: s.clone() }).collect();
++    plan_song(&notes, &SongOptions { body: "female".into(), bpm: 80.0, t0: 0.5, vibrato: 0.0, fricative_scale: 0.75, rules, ..Default::default() })
++}
++
++fn seg<'a>(p: &'a Plan, ipa: &str, n: usize) -> &'a chimera::phonetics::PlannedSegment {
++    p.segments.iter().filter(|s| s.ipa == ipa).nth(n).unwrap()
++}
++
++/// Peak abduction target of the stop gesture around a segment.
++fn stop_abduction(p: &Plan, ipa: &str) -> f64 {
++    let s = seg(p, ipa, 0);
++    p.gestures.iter().filter(|g| g.label_str() == "aspiration" && g.t0 >= s.t0 - 1e-6 && g.t0 < s.t1).map(|g| g.targets.get(ControlKey::ABDUCTION).unwrap()).next().unwrap()
++}
++
++#[test]
++fn stop_plus_glide_plus_vowel_is_aspirated_unless_after_s() {
++    assert_eq!(stop_abduction(&plan("twin", false), "t"), 0.22);
++    assert_eq!(stop_abduction(&plan("twin", true), "t"), 0.36);
++    assert_eq!(stop_abduction(&plan("tin", true), "t"), 0.36);
++    assert_eq!(stop_abduction(&plan("spin", true), "p"), 0.22);
++}
++
++#[test]
++fn a_coda_stop_does_not_borrow_the_next_onset() {
++    // /p/ of "keep" before "we": a coda stop, so the /w/ onset does not make it aspirated
++    assert_eq!(stop_abduction(&plan("keep we", true), "p"), 0.22);
++}
++
++#[test]
++fn word_final_stop_before_a_vowel_stays_a_coda() {
++    let (off, on) = (plan("up a", false), plan("up a", true));
++    assert!(off.segments.iter().all(|s| s.ipa != "ʔ"));
++    let p = seg(&on, "p", 0);
++    assert!(p.t1 - p.t0 > 1.4 * (seg(&off, "p", 0).t1 - seg(&off, "p", 0).t0));
++    assert_eq!(on.segments.iter().find(|s| s.t0 >= p.t1 - 1e-9).unwrap().ipa, "ʔ");
++}
++
++#[test]
++fn phrase_final_nasal_is_held() {
++    let plain = plan("sing", false);
++    let rule = plan("sing", true);
++    let d = |p: &Plan| seg(p, "ŋ", 0).t1 - seg(p, "ŋ", 0).t0;
++    assert!(d(&plain) < 0.07);
++    assert!((d(&rule) - 0.13).abs() < 1e-6);
++}
++
++#[test]
++fn coronal_gesture_waits_for_a_velar_nasal() {
++    let p = plan("sing to", true);
++    let (ng, t) = (seg(&p, "ŋ", 0), seg(&p, "t", 0));
++    let tip = p.gestures.iter().find(|g| g.label_str() == "t" && g.t0 >= t.t0 - 0.04 && g.targets.has(chimera::anatomy::human::ArticKey::TtY)).unwrap();
++    assert!(tip.t0 - tip.ramp_in >= ng.t1 + 0.009);
++    assert!(t.t1 - t.t0 > 0.1, "the segment grows by the delay");
++}
++
++#[test]
++fn coda_l_is_dark_on_the_sung_path() {
++    assert!(plan("bell", false).segments.iter().any(|s| s.ipa == "l"));
++    let p = plan("bell", true);
++    assert!(p.segments.iter().any(|s| s.ipa == "ɫ") && p.segments.iter().all(|s| s.ipa != "l"));
++}
++
++#[test]
++fn word_initial_s_after_a_consonant_is_not_shortened_further() {
++    let d = |p: &Plan, n| seg(p, "s", n).t1 - seg(p, "s", n).t0;
++    let on = plan("world so the sky", true);
++    assert!(d(&on, 0) > d(&on, 1) * 1.2, "after /d/: {}, after a vowel: {}", d(&on, 0), d(&on, 1));
++    let off = plan("world so the sky", false);
++    assert!((d(&off, 0) - d(&off, 1)).abs() < 1e-9);
++}
++
++#[test]
++fn a_lexicon_entry_reaches_phones_spelling_cannot() {
++    let mut g = g2p();
++    g.add_lexicon([("zhen", "TSR AH1 N")]);
++    assert_eq!(arpabet_to_segments("TSR AH1 N")[0].ipa, "ʈʂ");
++    let syl = lyrics_to_syllables("zhen", &g);
++    assert_eq!(syl[0].onset[0].ipa, "ʈʂ");
++    let notes = vec![SungNote { midi: 60.0, beats: 1.0, syl: syl[0].clone() }];
++    let p = plan_song(&notes, &SongOptions { body: "female".into(), bpm: 80.0, t0: 0.5, vibrato: 0.0, rules: true, ..Default::default() });
++    assert!(p.gestures.iter().any(|g| g.label_str() == "aspiration" && g.targets.get(ControlKey::ABDUCTION) == Some(0.22)), "unaspirated");
++}

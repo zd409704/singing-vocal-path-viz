@@ -1,0 +1,1994 @@
+{
+ "bpm": 84,
+ "t0": 1.0,
+ "vibrato": 35,
+ "lyrics": "a may - - zing - grace how sweet the sound - - that saved a wretch like me i once - - was lost - but now am found - - was blind but now i see",
+ "notes": [
+  [
+   60,
+   1.0
+  ],
+  [
+   65,
+   2.0
+  ],
+  [
+   69,
+   0.5
+  ],
+  [
+   65,
+   0.5
+  ],
+  [
+   69,
+   2.0
+  ],
+  [
+   67,
+   1.0
+  ],
+  [
+   65,
+   2.0
+  ],
+  [
+   62,
+   1.0
+  ],
+  [
+   60,
+   2.0
+  ],
+  [
+   60,
+   1.0
+  ],
+  [
+   65,
+   2.0
+  ],
+  [
+   69,
+   0.5
+  ],
+  [
+   65,
+   0.5
+  ],
+  [
+   0,
+   1.0
+  ],
+  [
+   69,
+   2.0
+  ],
+  [
+   67,
+   1.0
+  ],
+  [
+   69,
+   1.0
+  ],
+  [
+   72,
+   2.0
+  ],
+  [
+   69,
+   1.0
+  ],
+  [
+   72,
+   4.0
+  ],
+  [
+   0,
+   1.5
+  ],
+  [
+   69,
+   1.0
+  ],
+  [
+   72,
+   2.0
+  ],
+  [
+   69,
+   0.5
+  ],
+  [
+   72,
+   0.5
+  ],
+  [
+   69,
+   2.0
+  ],
+  [
+   67,
+   1.0
+  ],
+  [
+   65,
+   2.0
+  ],
+  [
+   62,
+   1.0
+  ],
+  [
+   60,
+   2.0
+  ],
+  [
+   60,
+   1.0
+  ],
+  [
+   65,
+   2.0
+  ],
+  [
+   69,
+   0.5
+  ],
+  [
+   65,
+   0.5
+  ],
+  [
+   0,
+   1.0
+  ],
+  [
+   69,
+   2.0
+  ],
+  [
+   67,
+   1.0
+  ],
+  [
+   69,
+   1.0
+  ],
+  [
+   67,
+   2.0
+  ],
+  [
+   67,
+   1.0
+  ],
+  [
+   65,
+   4.5
+  ]
+ ],
+ "bodyMix": {
+  "female": 0.85,
+  "child": 0
+ },
+ "source": {
+  "tension": 0.46,
+  "brightness": 0.16,
+  "vibratoRate": 6.1
+ },
+ "fricativeScale": 0.75,
+ "externalVibrato": true,
+ "gestures": [
+  {
+   "t0": 0.98,
+   "t1": 1.7143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.874
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 1.6943,
+   "t1": 2.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.92
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 2.1943,
+   "t1": 2.7857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.016
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 2.7657,
+   "t1": 3.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.939
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 3.1229,
+   "t1": 3.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.041
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 3.48,
+   "t1": 3.8571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.003
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 3.8371,
+   "t1": 4.3571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.016
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 4.3371,
+   "t1": 4.9286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.123
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 4.9086,
+   "t1": 5.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.038
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 5.2657,
+   "t1": 6.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.061
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 5.98,
+   "t1": 6.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.99
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 6.48,
+   "t1": 7.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.094
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 7.0514,
+   "t1": 7.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.011
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 7.4086,
+   "t1": 8.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.001
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 8.1229,
+   "t1": 8.6429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.914
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 8.6229,
+   "t1": 9.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.01
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 9.1943,
+   "t1": 9.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.933
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 9.5514,
+   "t1": 10.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.938
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 10.2657,
+   "t1": 10.7857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.92
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 10.7657,
+   "t1": 11.3571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.016
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 11.3371,
+   "t1": 11.7143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.939
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 11.6943,
+   "t1": 12.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.988
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 12.0514,
+   "t1": 12.25,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.928
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 12.23,
+   "t1": 12.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.631
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 13.1229,
+   "t1": 13.6429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.954
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 13.6229,
+   "t1": 14.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.054
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 14.1943,
+   "t1": 14.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.974
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 14.5514,
+   "t1": 15.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.025
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 15.2657,
+   "t1": 16.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.071
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 15.98,
+   "t1": 16.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.069
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 16.48,
+   "t1": 17.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.181
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 17.0514,
+   "t1": 17.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.091
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 17.4086,
+   "t1": 18.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.085
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 18.1229,
+   "t1": 19.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.071
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 19.5514,
+   "t1": 21.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.728
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 22.0514,
+   "t1": 22.7857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.982
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 22.7657,
+   "t1": 23.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.999
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 23.2657,
+   "t1": 23.8571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.105
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 23.8371,
+   "t1": 24.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.02
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 24.1943,
+   "t1": 24.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.041
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 24.5514,
+   "t1": 24.9286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.087
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 24.9086,
+   "t1": 25.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.016
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 25.4086,
+   "t1": 26.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.123
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 25.98,
+   "t1": 26.3571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.038
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 26.3371,
+   "t1": 27.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.061
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 27.0514,
+   "t1": 27.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.99
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 27.5514,
+   "t1": 28.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.094
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 28.1229,
+   "t1": 28.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.011
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 28.48,
+   "t1": 29.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.001
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 29.1943,
+   "t1": 29.7143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.914
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 29.6943,
+   "t1": 30.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.01
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 30.2657,
+   "t1": 30.6429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.933
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 30.6229,
+   "t1": 31.3571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.938
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 31.3371,
+   "t1": 31.8571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.92
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 31.8371,
+   "t1": 32.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.016
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 32.4086,
+   "t1": 32.7857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.939
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 32.7657,
+   "t1": 33.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.988
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 33.1229,
+   "t1": 33.3214,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.928
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 33.3014,
+   "t1": 33.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.631
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 34.1943,
+   "t1": 34.7143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.952
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 34.6943,
+   "t1": 35.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.052
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 35.2657,
+   "t1": 35.6429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.972
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 35.6229,
+   "t1": 36.3571,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.022
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 36.3371,
+   "t1": 37.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.068
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 37.0514,
+   "t1": 37.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.01
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 37.5514,
+   "t1": 38.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.117
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 38.1229,
+   "t1": 38.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.032
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 38.48,
+   "t1": 39.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 1.063
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 39.1943,
+   "t1": 40.8214,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.991
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 40.8014,
+   "t1": 42.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 8.0,
+   "targets": {
+    "breath": 0.674
+   },
+   "label": "phrase"
+  },
+  {
+   "t0": 0.22,
+   "t1": 0.88,
+   "rampIn": 0.1,
+   "rampOut": 0.1,
+   "strength": 8.0,
+   "targets": {
+    "breath": -0.3,
+    "abduction": 0.25
+   },
+   "label": "inhale"
+  },
+  {
+   "t0": 12.5886,
+   "t1": 12.9809,
+   "rampIn": 0.1,
+   "rampOut": 0.1,
+   "strength": 8.0,
+   "targets": {
+    "breath": -0.3,
+    "abduction": 0.25
+   },
+   "label": "inhale"
+  },
+  {
+   "t0": 21.16,
+   "t1": 21.9514,
+   "rampIn": 0.1,
+   "rampOut": 0.1,
+   "strength": 8.0,
+   "targets": {
+    "breath": -0.3,
+    "abduction": 0.25
+   },
+   "label": "inhale"
+  },
+  {
+   "t0": 33.66,
+   "t1": 34.0463,
+   "rampIn": 0.1,
+   "rampOut": 0.1,
+   "strength": 8.0,
+   "targets": {
+    "breath": -0.3,
+    "abduction": 0.25
+   },
+   "label": "inhale"
+  },
+  {
+   "t0": 1.2779,
+   "t1": 1.6643,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 35.1
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 1.0,
+   "t1": 1.7143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.91
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 1.9734,
+   "t1": 3.0929,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 26.4
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 1.7143,
+   "t1": 3.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.0
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 4.1754,
+   "t1": 5.2357,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 30.3
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 3.8571,
+   "t1": 5.2857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.19
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 8.406,
+   "t1": 9.5214,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 41.2
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 8.1429,
+   "t1": 9.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.72
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 13.3838,
+   "t1": 14.5214,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 34.9
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 13.1429,
+   "t1": 14.5714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.31
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 15.5204,
+   "t1": 15.95,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 37.0
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 15.2857,
+   "t1": 16.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.91
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 16.3099,
+   "t1": 17.3786,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 36.2
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 16.0,
+   "t1": 17.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.74
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 17.6614,
+   "t1": 18.0929,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 43.4
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 17.4286,
+   "t1": 18.1429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.03
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 18.4618,
+   "t1": 20.95,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 40.4
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 18.1429,
+   "t1": 21.0,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.83
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 23.1167,
+   "t1": 24.1643,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 43.0
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 22.7857,
+   "t1": 24.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.14
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 27.2781,
+   "t1": 28.45,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 29.3
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 27.0714,
+   "t1": 28.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.11
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 28.836,
+   "t1": 29.1643,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 29.6
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 28.5,
+   "t1": 29.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.47
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 31.6307,
+   "t1": 32.7357,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 31.5
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 31.3571,
+   "t1": 32.7857,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.79
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 34.492,
+   "t1": 35.5929,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 31.7
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 34.2143,
+   "t1": 35.6429,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.81
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 36.6712,
+   "t1": 37.0214,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 31.1
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 36.3571,
+   "t1": 37.0714,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.83
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 37.2868,
+   "t1": 38.45,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 30.4
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 37.0714,
+   "t1": 38.5,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.15
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 38.8416,
+   "t1": 39.1643,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 38.0
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 38.5,
+   "t1": 39.2143,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 6.19
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 39.5245,
+   "t1": 42.3786,
+   "rampIn": 0.3,
+   "rampOut": 0.06,
+   "strength": 4.0,
+   "targets": {
+    "vibrato": 45.8
+   },
+   "label": "vibrato"
+  },
+  {
+   "t0": 39.2143,
+   "t1": 42.4286,
+   "rampIn": 0.05,
+   "rampOut": 0.05,
+   "strength": 4.0,
+   "targets": {
+    "vibratoRate": 5.94
+   },
+   "label": "vibrato rate"
+  },
+  {
+   "t0": 1.6943,
+   "t1": 1.7743,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 341.252
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 3.1229,
+   "t1": 3.2029,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 3.8371,
+   "t1": 3.9171,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 10.2657,
+   "t1": 10.3457,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 341.252
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 11.6943,
+   "t1": 11.7743,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 15.2657,
+   "t1": 15.3457,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 15.98,
+   "t1": 16.06,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 511.3
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 18.1229,
+   "t1": 18.2029,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 511.3
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 22.7657,
+   "t1": 22.8457,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 511.3
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 24.5514,
+   "t1": 24.6314,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 511.3
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 31.3371,
+   "t1": 31.4171,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 341.252
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 32.7657,
+   "t1": 32.8457,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 36.3371,
+   "t1": 36.4171,
+   "rampIn": 0.02,
+   "rampOut": 0.03,
+   "strength": 30.0,
+   "targets": {
+    "f0": 429.95
+   },
+   "label": "pitch"
+  },
+  {
+   "t0": 0.97,
+   "t1": 1.7143,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.297
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 1.6843,
+   "t1": 3.1429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 3.1129,
+   "t1": 3.5,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 3.47,
+   "t1": 3.8571,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 3.8271,
+   "t1": 5.2857,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 5.2557,
+   "t1": 6.0,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 5.97,
+   "t1": 7.4286,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 7.3986,
+   "t1": 8.1429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.348
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 8.1129,
+   "t1": 9.5714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.297
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 9.5414,
+   "t1": 10.2857,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.297
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 10.2557,
+   "t1": 11.7143,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 11.6843,
+   "t1": 12.0714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 12.0414,
+   "t1": 12.4286,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 13.1129,
+   "t1": 14.5714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 14.5414,
+   "t1": 15.2857,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 15.2557,
+   "t1": 16.0,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 15.97,
+   "t1": 17.4286,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.598
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 17.3986,
+   "t1": 18.1429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 18.1129,
+   "t1": 21.0,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.598
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 22.0414,
+   "t1": 22.7857,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 22.7557,
+   "t1": 24.2143,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.598
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 24.1843,
+   "t1": 24.5714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 24.5414,
+   "t1": 24.9286,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.598
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 24.8986,
+   "t1": 26.3571,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 26.3271,
+   "t1": 27.0714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 27.0414,
+   "t1": 28.5,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 28.47,
+   "t1": 29.2143,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.348
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 29.1843,
+   "t1": 30.6429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.297
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 30.6129,
+   "t1": 31.3571,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.297
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 31.3271,
+   "t1": 32.7857,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 32.7557,
+   "t1": 33.1429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 33.1129,
+   "t1": 33.5,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 34.1843,
+   "t1": 35.6429,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 35.6129,
+   "t1": 36.3571,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 36.3271,
+   "t1": 37.0714,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.522
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 37.0414,
+   "t1": 38.5,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 38.47,
+   "t1": 39.2143,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.473
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 39.1843,
+   "t1": 42.4286,
+   "rampIn": 0.06,
+   "rampOut": 0.06,
+   "strength": 8.0,
+   "targets": {
+    "tension": 0.422
+   },
+   "label": "tension"
+  },
+  {
+   "t0": 3.7931,
+   "t1": 3.8571,
+   "rampIn": 0.02,
+   "rampOut": 0.02,
+   "strength": 8.0,
+   "targets": {
+    "abduction": 0.07
+   },
+   "label": "z"
+  },
+  {
+   "t0": 26.2411,
+   "t1": 26.3051,
+   "rampIn": 0.02,
+   "rampOut": 0.02,
+   "strength": 8.0,
+   "targets": {
+    "abduction": 0.07
+   },
+   "label": "z"
+  },
+  {
+   "t0": 35.4709,
+   "t1": 35.5349,
+   "rampIn": 0.02,
+   "rampOut": 0.02,
+   "strength": 8.0,
+   "targets": {
+    "abduction": 0.07
+   },
+   "label": "z"
+  }
+ ],
+ "phonologyRules": true
+}
