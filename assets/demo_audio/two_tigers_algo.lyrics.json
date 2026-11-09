@@ -1,0 +1,510 @@
+{
+ "title": "Two Tigers (traditional, to Frere Jacques)",
+ "subtitle": "TWO TIGERS · VOICE UPGRADE (CHIMERA PATCH, STAGE C BODY)",
+ "syllables": [
+  {
+   "grapheme": "liang",
+   "pron": "liang",
+   "phones": [
+    "L",
+    "Y",
+    "AA",
+    "NG"
+   ],
+   "display": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 1.0,
+   "end": 1.6
+  },
+  {
+   "grapheme": "zhi",
+   "pron": "zhi",
+   "phones": [
+    "CH",
+    "AH"
+   ],
+   "display": [
+    "ʈʂ",
+    "ɝ"
+   ],
+   "notes": 1,
+   "start": 1.6,
+   "end": 2.2
+  },
+  {
+   "grapheme": "lao",
+   "pron": "lao",
+   "phones": [
+    "L",
+    "AW"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 2.2,
+   "end": 2.8000000000000003
+  },
+  {
+   "grapheme": "hu",
+   "pron": "hu",
+   "phones": [
+    "HH",
+    "UW"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 2.8000000000000003,
+   "end": 3.4000000000000004
+  },
+  {
+   "grapheme": "liang",
+   "pron": "liang",
+   "phones": [
+    "L",
+    "Y",
+    "AA",
+    "NG"
+   ],
+   "display": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 3.4000000000000004,
+   "end": 4.0
+  },
+  {
+   "grapheme": "zhi",
+   "pron": "zhi",
+   "phones": [
+    "CH",
+    "AH"
+   ],
+   "display": [
+    "ʈʂ",
+    "ɝ"
+   ],
+   "notes": 1,
+   "start": 4.0,
+   "end": 4.6
+  },
+  {
+   "grapheme": "lao",
+   "pron": "lao",
+   "phones": [
+    "L",
+    "AW"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 4.6,
+   "end": 5.199999999999999
+  },
+  {
+   "grapheme": "hu",
+   "pron": "hu",
+   "phones": [
+    "HH",
+    "UW"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 5.199999999999999,
+   "end": 5.799999999999999
+  },
+  {
+   "grapheme": "pao",
+   "pron": "pao",
+   "phones": [
+    "B",
+    "AW"
+   ],
+   "display": [
+    "p",
+    null
+   ],
+   "notes": 1,
+   "start": 6.399999999999999,
+   "end": 6.999999999999998
+  },
+  {
+   "grapheme": "de",
+   "pron": "duh",
+   "phones": [
+    "D",
+    "AH"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 6.999999999999998,
+   "end": 7.599999999999998
+  },
+  {
+   "grapheme": "kuai",
+   "pron": "kwai",
+   "phones": [
+    "K",
+    "W",
+    "AY"
+   ],
+   "display": [
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 7.599999999999998,
+   "end": 8.199999999999998
+  },
+  {
+   "grapheme": "pao",
+   "pron": "pao",
+   "phones": [
+    "B",
+    "AW"
+   ],
+   "display": [
+    "p",
+    null
+   ],
+   "notes": 1,
+   "start": 8.799999999999997,
+   "end": 9.399999999999997
+  },
+  {
+   "grapheme": "de",
+   "pron": "duh",
+   "phones": [
+    "D",
+    "AH"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 9.399999999999997,
+   "end": 9.999999999999996
+  },
+  {
+   "grapheme": "kuai",
+   "pron": "kwai",
+   "phones": [
+    "K",
+    "W",
+    "AY"
+   ],
+   "display": [
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 9.999999999999996,
+   "end": 10.599999999999996
+  },
+  {
+   "grapheme": "yi",
+   "pron": "yi",
+   "phones": [
+    "Y",
+    "IY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 11.199999999999996,
+   "end": 11.499999999999996
+  },
+  {
+   "grapheme": "zhi",
+   "pron": "zhi",
+   "phones": [
+    "CH",
+    "AH"
+   ],
+   "display": [
+    "ʈʂ",
+    "ɝ"
+   ],
+   "notes": 1,
+   "start": 11.499999999999996,
+   "end": 11.799999999999997
+  },
+  {
+   "grapheme": "mei",
+   "pron": "mei",
+   "phones": [
+    "M",
+    "EY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 11.799999999999997,
+   "end": 12.099999999999998
+  },
+  {
+   "grapheme": "you",
+   "pron": "yo",
+   "phones": [
+    "Y",
+    "OU"
+   ],
+   "display": [
+    null,
+    "oʊ"
+   ],
+   "notes": 1,
+   "start": 12.099999999999998,
+   "end": 12.399999999999999
+  },
+  {
+   "grapheme": "yan",
+   "pron": "yen",
+   "phones": [
+    "Y",
+    "EH",
+    "N"
+   ],
+   "display": [
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 12.399999999999999,
+   "end": 12.999999999999998
+  },
+  {
+   "grapheme": "jing",
+   "pron": "jing",
+   "phones": [
+    "CH",
+    "IH",
+    "NG"
+   ],
+   "display": [
+    "dʒ",
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 12.999999999999998,
+   "end": 13.599999999999998
+  },
+  {
+   "grapheme": "yi",
+   "pron": "yi",
+   "phones": [
+    "Y",
+    "IY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 14.199999999999998,
+   "end": 14.499999999999998
+  },
+  {
+   "grapheme": "zhi",
+   "pron": "zhi",
+   "phones": [
+    "CH",
+    "AH"
+   ],
+   "display": [
+    "ʈʂ",
+    "ɝ"
+   ],
+   "notes": 1,
+   "start": 14.499999999999998,
+   "end": 14.799999999999999
+  },
+  {
+   "grapheme": "mei",
+   "pron": "mei",
+   "phones": [
+    "M",
+    "EY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 14.799999999999999,
+   "end": 15.1
+  },
+  {
+   "grapheme": "you",
+   "pron": "yo",
+   "phones": [
+    "Y",
+    "OU"
+   ],
+   "display": [
+    null,
+    "oʊ"
+   ],
+   "notes": 1,
+   "start": 15.1,
+   "end": 15.4
+  },
+  {
+   "grapheme": "wei",
+   "pron": "wei",
+   "phones": [
+    "W",
+    "EY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 15.4,
+   "end": 16.0
+  },
+  {
+   "grapheme": "ba",
+   "pron": "bah",
+   "phones": [
+    "B",
+    "AA"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 16.0,
+   "end": 16.6
+  },
+  {
+   "grapheme": "zhen",
+   "pron": "zhen",
+   "phones": [
+    "CH",
+    "AH",
+    "N"
+   ],
+   "display": [
+    "ʈʂ",
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 17.200000000000003,
+   "end": 17.800000000000004
+  },
+  {
+   "grapheme": "qi",
+   "pron": "chee",
+   "phones": [
+    "CH",
+    "IY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 17.800000000000004,
+   "end": 18.400000000000006
+  },
+  {
+   "grapheme": "guai",
+   "pron": "gwie",
+   "phones": [
+    "G",
+    "W",
+    "AY"
+   ],
+   "display": [
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 18.400000000000006,
+   "end": 19.000000000000007
+  },
+  {
+   "grapheme": "zhen",
+   "pron": "zhen",
+   "phones": [
+    "CH",
+    "AH",
+    "N"
+   ],
+   "display": [
+    "ʈʂ",
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 19.60000000000001,
+   "end": 20.20000000000001
+  },
+  {
+   "grapheme": "qi",
+   "pron": "chee",
+   "phones": [
+    "CH",
+    "IY"
+   ],
+   "display": [
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 20.20000000000001,
+   "end": 20.80000000000001
+  },
+  {
+   "grapheme": "guai",
+   "pron": "gwie",
+   "phones": [
+    "G",
+    "W",
+    "AY"
+   ],
+   "display": [
+    null,
+    null,
+    null
+   ],
+   "notes": 1,
+   "start": 20.80000000000001,
+   "end": 22.600000000000012
+  }
+ ]
+}

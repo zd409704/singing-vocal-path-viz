@@ -1,0 +1,335 @@
+{
+ "title": "Amazing Grace (traditional)",
+ "subtitle": "AMAZING GRACE \u00b7 CHIMERA PHYSICAL-MODEL VOICE (FEMALE BODY)",
+ "syllables": [
+  {
+   "grapheme": "A",
+   "pron": "uh",
+   "phones": [
+    "AH"
+   ],
+   "notes": 1,
+   "start": 1.0,
+   "end": 1.7142857142857144
+  },
+  {
+   "grapheme": "ma",
+   "pron": "may",
+   "phones": [
+    "M",
+    "EY"
+   ],
+   "notes": 3,
+   "start": 1.7142857142857144,
+   "end": 3.8571428571428577
+  },
+  {
+   "grapheme": "zing",
+   "pron": "zing",
+   "phones": [
+    "Z",
+    "IH",
+    "NG"
+   ],
+   "notes": 2,
+   "start": 3.8571428571428577,
+   "end": 6.000000000000001
+  },
+  {
+   "grapheme": "grace",
+   "pron": "grayss",
+   "phones": [
+    "G",
+    "R",
+    "EY",
+    "S"
+   ],
+   "notes": 1,
+   "start": 6.000000000000001,
+   "end": 7.42857142857143
+  },
+  {
+   "grapheme": "how",
+   "pron": "how",
+   "phones": [
+    "HH",
+    "AW"
+   ],
+   "notes": 1,
+   "start": 7.42857142857143,
+   "end": 8.142857142857144
+  },
+  {
+   "grapheme": "sweet",
+   "pron": "sweet",
+   "phones": [
+    "S",
+    "W",
+    "IY",
+    "T"
+   ],
+   "notes": 1,
+   "start": 8.142857142857144,
+   "end": 9.571428571428573
+  },
+  {
+   "grapheme": "the",
+   "pron": "thuh",
+   "phones": [
+    "DH",
+    "AH"
+   ],
+   "notes": 1,
+   "start": 9.571428571428573,
+   "end": 10.285714285714286
+  },
+  {
+   "grapheme": "sound",
+   "pron": "sownd",
+   "phones": [
+    "S",
+    "AW",
+    "N",
+    "D"
+   ],
+   "notes": 3,
+   "start": 10.285714285714286,
+   "end": 12.42857142857143
+  },
+  {
+   "grapheme": "that",
+   "pron": "that",
+   "phones": [
+    "DH",
+    "AE",
+    "T"
+   ],
+   "notes": 1,
+   "start": 13.142857142857144,
+   "end": 14.571428571428573
+  },
+  {
+   "grapheme": "saved",
+   "pron": "sayvd",
+   "phones": [
+    "S",
+    "EY",
+    "V",
+    "D"
+   ],
+   "notes": 1,
+   "start": 14.571428571428573,
+   "end": 15.285714285714286
+  },
+  {
+   "grapheme": "a",
+   "pron": "uh",
+   "phones": [
+    "AH"
+   ],
+   "notes": 1,
+   "start": 15.285714285714286,
+   "end": 16.0
+  },
+  {
+   "grapheme": "wretch",
+   "pron": "retch",
+   "phones": [
+    "R",
+    "EH",
+    "CH"
+   ],
+   "notes": 1,
+   "start": 16.0,
+   "end": 17.428571428571427
+  },
+  {
+   "grapheme": "like",
+   "pron": "lyke",
+   "phones": [
+    "L",
+    "AY",
+    "K"
+   ],
+   "notes": 1,
+   "start": 17.428571428571427,
+   "end": 18.142857142857142
+  },
+  {
+   "grapheme": "me",
+   "pron": "mee",
+   "phones": [
+    "M",
+    "IY"
+   ],
+   "notes": 1,
+   "start": 18.142857142857142,
+   "end": 21.0
+  },
+  {
+   "grapheme": "I",
+   "pron": "eye",
+   "phones": [
+    "AY"
+   ],
+   "notes": 1,
+   "start": 22.071428571428573,
+   "end": 22.78571428571429
+  },
+  {
+   "grapheme": "once",
+   "pron": "wunss",
+   "phones": [
+    "W",
+    "AH",
+    "N",
+    "S"
+   ],
+   "notes": 3,
+   "start": 22.78571428571429,
+   "end": 24.92857142857143
+  },
+  {
+   "grapheme": "was",
+   "pron": "wuz",
+   "phones": [
+    "W",
+    "AH",
+    "Z"
+   ],
+   "notes": 1,
+   "start": 24.92857142857143,
+   "end": 26.357142857142858
+  },
+  {
+   "grapheme": "lost",
+   "pron": "lawst",
+   "phones": [
+    "L",
+    "AO",
+    "S",
+    "T"
+   ],
+   "notes": 2,
+   "start": 26.357142857142858,
+   "end": 28.5
+  },
+  {
+   "grapheme": "but",
+   "pron": "butt",
+   "phones": [
+    "B",
+    "AH",
+    "T"
+   ],
+   "notes": 1,
+   "start": 28.5,
+   "end": 29.214285714285715
+  },
+  {
+   "grapheme": "now",
+   "pron": "now",
+   "phones": [
+    "N",
+    "AW"
+   ],
+   "notes": 1,
+   "start": 29.214285714285715,
+   "end": 30.642857142857142
+  },
+  {
+   "grapheme": "am",
+   "pron": "am",
+   "phones": [
+    "AE",
+    "M"
+   ],
+   "notes": 1,
+   "start": 30.642857142857142,
+   "end": 31.357142857142858
+  },
+  {
+   "grapheme": "found",
+   "pron": "fownd",
+   "phones": [
+    "F",
+    "AW",
+    "N",
+    "D"
+   ],
+   "notes": 3,
+   "start": 31.357142857142858,
+   "end": 33.49999999999999
+  },
+  {
+   "grapheme": "was",
+   "pron": "wuz",
+   "phones": [
+    "W",
+    "AH",
+    "Z"
+   ],
+   "notes": 1,
+   "start": 34.21428571428571,
+   "end": 35.64285714285714
+  },
+  {
+   "grapheme": "blind",
+   "pron": "blynd",
+   "phones": [
+    "B",
+    "L",
+    "AY",
+    "N",
+    "D"
+   ],
+   "notes": 1,
+   "start": 35.64285714285714,
+   "end": 36.357142857142854
+  },
+  {
+   "grapheme": "but",
+   "pron": "butt",
+   "phones": [
+    "B",
+    "AH",
+    "T"
+   ],
+   "notes": 1,
+   "start": 36.357142857142854,
+   "end": 37.07142857142857
+  },
+  {
+   "grapheme": "now",
+   "pron": "now",
+   "phones": [
+    "N",
+    "AW"
+   ],
+   "notes": 1,
+   "start": 37.07142857142857,
+   "end": 38.5
+  },
+  {
+   "grapheme": "I",
+   "pron": "eye",
+   "phones": [
+    "AY"
+   ],
+   "notes": 1,
+   "start": 38.5,
+   "end": 39.214285714285715
+  },
+  {
+   "grapheme": "see",
+   "pron": "see",
+   "phones": [
+    "S",
+    "IY"
+   ],
+   "notes": 1,
+   "start": 39.214285714285715,
+   "end": 42.42857142857143
+  }
+ ]
+}

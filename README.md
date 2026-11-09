@@ -23,3 +23,7 @@ The dashboard layout follows a public post used as a layout and motion reference
 ## Contents note
 
 See `GITHUB-CONTENTS.md` for what this snapshot includes and omits.
+
+## Experimental voice-mechanism checkpoint
+
+A later, incomplete branch of the work adds a loopback comparative page over a pinned Chimera source tree (`mech-c3`) and an upgraded baseline. It is experimental, unvalidated, and not a listening acceptance. Setup, rebuild, and the holes in version coverage are in `docs/voice-mechanisms.md`. The sealed demo above is unchanged.

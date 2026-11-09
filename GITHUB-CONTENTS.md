@@ -21,3 +21,27 @@ Lean public archive of the sealed singing-vocal-path-viz demo, uploaded 2026-11-
 - No extracted reference audio exists and none is included
 
 This snapshot does not rerun the demo pipeline; it publishes the sealed files as they stood after DEMO_LANDED.
+
+## Voice-mechanism checkpoint (later commit)
+
+Experimental and incomplete. Not owner quality acceptance. The formal numerical suite was not green when the checkpoint was captured.
+
+### Included
+
+- Unpacked Chimera sources: `engines/upgraded-algo`, `engines/mech-c3`, with per-file manifests under `versions/*/SOURCE-FILES.sha256`
+- Upstream file manifest `versions/upstream-e939cf7/SOURCE-FILES.sha256` and `tools/vm/reconstruct_upstream.sh` (reverse of `tools/chimera_voice_upgrade.patch` onto the upgraded tree). Provenance: `engines/PROVENANCE.md`
+- Hash pins for omitted mech-c1, mech-c2, and the omitted release binaries (`versions/*/SHA256SUMS`)
+- `versions/registry.json` and `versions/availability.json` (which lanes this repo can build)
+- Loopback page and server: `tools/vm/page.html`, `server.py`, `score.py`, `run_tests.py`, `checkpoint.sh`, `rebuild.sh`
+- Planner and room tools, public-domain note/lyric/segment JSON for Twinkle, Two Tigers (ASCII pinyin), and Amazing Grace
+- Research notes that were in the staging archive, plus `docs/voice-mechanisms.md`
+
+### Omitted from that checkpoint
+
+- `source.tgz` archives (the unpacked trees plus manifests replace them; archive sha256 values stay in `SHA256SUMS`)
+- Engine binaries and `target/` build products (rebuild)
+- mech-c1 and mech-c2 source (not reconstructable here; not replaced by mech-c3)
+- WAV, MP4, the prechange snapshot, `orch/logs`, source-post media, credentials
+- A green `tools/vm/run_tests.py` result (none existed at capture)
+
+See `OMISSIONS.md` and `PUBLISH.md`.

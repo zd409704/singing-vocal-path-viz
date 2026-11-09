@@ -16,3 +16,8 @@ notes/reference/source-post-2119421849134305644.mp4
 *.tar.gz
 .env
 .env.*
+# Voice-mechanism rebuilds. Sources stay under engines/. Pinned hashes stay under versions/.
+engines/*/target/
+versions/*/chimera
+versions/*/source/
+results/voice_mechanisms/
